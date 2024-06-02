@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.1.0] - 2024-06-02
+### :sparkles: New Features
+- [`740a10e`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/740a10ebf335ba2bb4a1168ea50b80c799a0160a) - add the version 0.0.1 *(commit by [@pabllopf](https://github.com/pabllopf))*
+- [`e7613f9`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/e7613f9f3109f3b62ba2a787f0a2234363fbaa44) - add spaces *(commit by [@pabllopf](https://github.com/pabllopf))*
+
+### :construction_worker: Build System
+- [`bef30ec`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/bef30eccb17c77630bd7797f43140161d1551cd1) - **deps**: bump actions/setup-dotnet from 3 to 4 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`5d3fa92`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/5d3fa928c422e05394daf2a4285b0a986de6ed8d) - **deps**: bump actions/dependency-review-action from 3 to 4 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`3243148`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/3243148c21e0b4b5f696efd54629e589cea87c1f) - **deps**: bump actions/stale from 8 to 9 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`6c3bb3a`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/6c3bb3abfc22bdb3a6ebf4298b92fdd1c70c540e) - **deps**: bump softprops/action-gh-release from 1 to 2 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+
+
 ## [v0.0.9] - 2024-06-01
 ### :bug: Bug Fixes
 - [`38c9fc4`](https://github.com/pabllopf/Alis.Sample.Pong/commit/38c9fc42fc1db18bf9281a7591af9e37798e58f0) - change the spaces *(commit by [@pabllopf](https://github.com/pabllopf))*
@@ -61,3 +73,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v0.0.7]: https://github.com/pabllopf/Alis.Sample.Pong/compare/v0.0.6...v0.0.7
 [v0.0.8]: https://github.com/pabllopf/Alis.Sample.Pong/compare/v0.0.7...v0.0.8
 [v0.0.9]: https://github.com/pabllopf/Alis.Sample.Pong/compare/v0.0.8...v0.0.9
+[v0.1.0]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.0.0...v0.1.0
