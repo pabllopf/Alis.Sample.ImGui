@@ -3,9 +3,6 @@ name: "[PRO][PUBLISH]"
 on:
   push:
     branches: [ master ]
-    paths-ignore:
-      - '.git/**'
-      - '.github/**'
       
 jobs:
   
