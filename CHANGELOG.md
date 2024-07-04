@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.1.1] - 2024-07-04
+### :sparkles: New Features
+- [`48d001e`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/48d001e914fa838ad86a07327dcedb267c579630) - delete unsafe code *(commit by [@pabllopf](https://github.com/pabllopf))*
+
+
 ## [v0.1.0] - 2024-06-02
 ### :sparkles: New Features
 - [`740a10e`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/740a10ebf335ba2bb4a1168ea50b80c799a0160a) - add the version 0.0.1 *(commit by [@pabllopf](https://github.com/pabllopf))*
@@ -74,3 +79,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v0.0.8]: https://github.com/pabllopf/Alis.Sample.Pong/compare/v0.0.7...v0.0.8
 [v0.0.9]: https://github.com/pabllopf/Alis.Sample.Pong/compare/v0.0.8...v0.0.9
 [v0.1.0]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.0.0...v0.1.0
+[v0.1.1]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.1.0...v0.1.1
