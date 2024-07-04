@@ -39,9 +39,10 @@ using Alis.Core.Graphic.Sdl2;
 using Alis.Core.Graphic.Sdl2.Enums;
 using Alis.Core.Graphic.Sdl2.Structs;
 using Alis.Extension.Graphic.ImGui;
-using Alis.Extension.Graphic.ImGui.Extras.Guizmo;
+using Alis.Extension.Graphic.ImGui.Extras.GuizMo;
 using Alis.Extension.Graphic.ImGui.Extras.Node;
 using Alis.Extension.Graphic.ImGui.Extras.Plot;
+using Alis.Extension.Graphic.ImGui.Extras.Plot.Native;
 using Alis.Extension.Graphic.OpenGL;
 using Alis.Extension.Graphic.OpenGL.Constructs;
 using Alis.Extension.Graphic.OpenGL.Enums;
@@ -181,7 +182,7 @@ namespace Alis.Sample.ImGui
         /// <summary>
         ///     The io
         /// </summary>
-        private ImGuiIoPtr io = null;
+        private ImGuiIoPtr io;
         
         /// <summary>
         ///     The menu down state
@@ -197,7 +198,7 @@ namespace Alis.Sample.ImGui
         ///     Starts this instance
         /// </summary>
         /// <returns>The int</returns>
-        public unsafe void Start()
+        public void Start()
         {
             // initialize SDL and set a few defaults for the OpenGL context
             if (Sdl.Init(InitSettings.InitVideo) != 0)
@@ -208,9 +209,6 @@ namespace Alis.Sample.ImGui
             
             // GET VERSION SDL2
             Version version = Sdl.GetVersion();
-            
-            Logger.LogLevel = LogLevel.Info;
-            
             Logger.Info(@$"SDL2 VERSION {version.major}.{version.minor}.{version.patch}");
             
             // CONFIG THE SDL2 AN OPENGL CONFIGURATION
@@ -246,13 +244,13 @@ namespace Alis.Sample.ImGui
             // compile the shader program
             _shader = new GlShaderProgram(VertexShader, FragmentShader);
             
-            _context = Extension.Graphic.ImGui.ImGui.CreateContext();
+            _context = Extension.Graphic.ImGui.Native.ImGui.CreateContext();
             
-            io = Extension.Graphic.ImGui.ImGui.GetIo();
+            io = Extension.Graphic.ImGui.Native.ImGui.GetIo();
             
             io.DisplaySize = new Vector2(800, 600);
             
-            Logger.Info($@"IMGUI VERSION {Extension.Graphic.ImGui.ImGui.GetVersion()}");
+            Logger.Info($@"IMGUI VERSION {Extension.Graphic.ImGui.Native.ImGui.GetVersion()}");
             
             // active plot renders
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset | ImGuiBackendFlags.PlatformHasViewports | ImGuiBackendFlags.HasGamepad | ImGuiBackendFlags.HasMouseHoveredViewport | ImGuiBackendFlags.HasMouseCursors;
@@ -269,11 +267,11 @@ namespace Alis.Sample.ImGui
             
             ImNodes.CreateContext();
             ImPlot.CreateContext();
-            ImGuizmo.SetImGuiContext(_context);
-            Extension.Graphic.ImGui.ImGui.SetCurrentContext(_context);
+            ImGuizMo.SetImGuiContext(_context);
+            Extension.Graphic.ImGui.Native.ImGui.SetCurrentContext(_context);
             
             // REBUILD ATLAS
-            ImFontAtlasPtr fonts = Extension.Graphic.ImGui.ImGui.GetIo().Fonts;
+            ImFontAtlasPtr fonts = Extension.Graphic.ImGui.Native.ImGui.GetIo().Fonts;
             
             string dirFonts = Environment.CurrentDirectory + "/Assets/Fonts/Jetbrains/";
             string fontToLoad = "JetBrainsMono-Bold.ttf";
@@ -293,53 +291,56 @@ namespace Alis.Sample.ImGui
             fonts.AddFontDefault();
             ImFontPtr fontLoaded = fonts.AddFontFromFileTtf(@$"{dirFonts}{fontToLoad}", 14);
             
-            fonts.GetTexDataAsRgba32(out byte* pixelData, out int width, out int height, out int _);
-            _fontTextureId = LoadTexture((IntPtr) pixelData, width, height);
+            fonts.GetTexDataAsRgba32(out IntPtr pixelData, out int width, out int height, out int _);
+            _fontTextureId = LoadTexture(pixelData, width, height);
             
             fonts.TexId = (IntPtr) _fontTextureId;
             fonts.ClearTexData();
             
             // CONFIG DOCKSPACE
-            ImGuiViewportPtr viewport = Extension.Graphic.ImGui.ImGui.GetMainViewport();
-            Extension.Graphic.ImGui.ImGui.SetNextWindowPos(viewport.WorkPos);
-            Extension.Graphic.ImGui.ImGui.SetNextWindowSize(viewport.WorkSize);
-            Extension.Graphic.ImGui.ImGui.SetNextWindowViewport(viewport.Id);
-            Extension.Graphic.ImGui.ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
-            Extension.Graphic.ImGui.ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
+            ImGuiViewportPtr viewport = Extension.Graphic.ImGui.Native.ImGui.GetMainViewport();
+            Extension.Graphic.ImGui.Native.ImGui.SetNextWindowPos(viewport.WorkPos);
+            Extension.Graphic.ImGui.Native.ImGui.SetNextWindowSize(viewport.WorkSize);
+            Extension.Graphic.ImGui.Native.ImGui.SetNextWindowViewport(viewport.Id);
+            Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
+            Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
             dockspaceflags |= ImGuiWindowFlags.MenuBar;
             dockspaceflags |= ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove;
             //dockspaceflags |= ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoNavFocus;
             
             // config style
-            style = Extension.Graphic.ImGui.ImGui.GetStyle();
-            Extension.Graphic.ImGui.ImGui.StyleColorsDark();
+            style = Extension.Graphic.ImGui.Native.ImGui.GetStyle();
+            Extension.Graphic.ImGui.Native.ImGui.StyleColorsDark();
             style.WindowRounding = 0.0f;
             style.Colors2.W = 1.0f;
             
             // config input manager 
             
-            io.KeyMap[(int) ImGuiKey.Tab] = (int) SdlScancode.SdlScancodeTab;
-            io.KeyMap[(int) ImGuiKey.LeftArrow] = (int) SdlScancode.SdlScancodeLeft;
-            io.KeyMap[(int) ImGuiKey.RightArrow] = (int) SdlScancode.SdlScancodeRight;
-            io.KeyMap[(int) ImGuiKey.UpArrow] = (int) SdlScancode.SdlScancodeUp;
-            io.KeyMap[(int) ImGuiKey.DownArrow] = (int) SdlScancode.SdlScancodeDown;
-            io.KeyMap[(int) ImGuiKey.PageUp] = (int) SdlScancode.SdlScancodePageup;
-            io.KeyMap[(int) ImGuiKey.PageDown] = (int) SdlScancode.SdlScancodePagedown;
-            io.KeyMap[(int) ImGuiKey.Home] = (int) SdlScancode.SdlScancodeHome;
-            io.KeyMap[(int) ImGuiKey.End] = (int) SdlScancode.SdlScancodeEnd;
-            io.KeyMap[(int) ImGuiKey.Insert] = (int) SdlScancode.SdlScancodeInsert;
-            io.KeyMap[(int) ImGuiKey.Delete] = (int) SdlScancode.SdlScancodeDelete;
-            io.KeyMap[(int) ImGuiKey.Backspace] = (int) SdlScancode.SdlScancodeBackspace;
-            io.KeyMap[(int) ImGuiKey.Space] = (int) SdlScancode.SdlScancodeSpace;
-            io.KeyMap[(int) ImGuiKey.Enter] = (int) SdlScancode.SdlScancodeReturn;
-            io.KeyMap[(int) ImGuiKey.Escape] = (int) SdlScancode.SdlScancodeEscape;
-            io.KeyMap[(int) ImGuiKey.KeypadEnter] = (int) SdlScancode.SdlScancodeReturn2;
-            io.KeyMap[(int) ImGuiKey.A] = (int) SdlScancode.SdlScancodeA;
-            io.KeyMap[(int) ImGuiKey.C] = (int) SdlScancode.SdlScancodeC;
-            io.KeyMap[(int) ImGuiKey.V] = (int) SdlScancode.SdlScancodeV;
-            io.KeyMap[(int) ImGuiKey.X] = (int) SdlScancode.SdlScancodeX;
-            io.KeyMap[(int) ImGuiKey.Y] = (int) SdlScancode.SdlScancodeY;
-            io.KeyMap[(int) ImGuiKey.Z] = (int) SdlScancode.SdlScancodeZ;
+            RangeAccessor<int> ioKeyMap = io.KeyMap;
+            ioKeyMap[(int) ImGuiKey.Tab] = (int) SdlScancode.SdlScancodeTab;
+            ioKeyMap[(int) ImGuiKey.LeftArrow] = (int) SdlScancode.SdlScancodeLeft;
+            ioKeyMap[(int) ImGuiKey.RightArrow] = (int) SdlScancode.SdlScancodeRight;
+            ioKeyMap[(int) ImGuiKey.UpArrow] = (int) SdlScancode.SdlScancodeUp;
+            ioKeyMap[(int) ImGuiKey.DownArrow] = (int) SdlScancode.SdlScancodeDown;
+            ioKeyMap[(int) ImGuiKey.PageUp] = (int) SdlScancode.SdlScancodePageup;
+            ioKeyMap[(int) ImGuiKey.PageDown] = (int) SdlScancode.SdlScancodePagedown;
+            ioKeyMap[(int) ImGuiKey.Home] = (int) SdlScancode.SdlScancodeHome;
+            ioKeyMap[(int) ImGuiKey.End] = (int) SdlScancode.SdlScancodeEnd;
+            ioKeyMap[(int) ImGuiKey.Insert] = (int) SdlScancode.SdlScancodeInsert;
+            ioKeyMap[(int) ImGuiKey.Delete] = (int) SdlScancode.SdlScancodeDelete;
+            ioKeyMap[(int) ImGuiKey.Backspace] = (int) SdlScancode.SdlScancodeBackspace;
+            ioKeyMap[(int) ImGuiKey.Space] = (int) SdlScancode.SdlScancodeSpace;
+            ioKeyMap[(int) ImGuiKey.Enter] = (int) SdlScancode.SdlScancodeReturn;
+            ioKeyMap[(int) ImGuiKey.Escape] = (int) SdlScancode.SdlScancodeEscape;
+            ioKeyMap[(int) ImGuiKey.KeypadEnter] = (int) SdlScancode.SdlScancodeReturn2;
+            ioKeyMap[(int) ImGuiKey.A] = (int) SdlScancode.SdlScancodeA;
+            ioKeyMap[(int) ImGuiKey.C] = (int) SdlScancode.SdlScancodeC;
+            ioKeyMap[(int) ImGuiKey.V] = (int) SdlScancode.SdlScancodeV;
+            ioKeyMap[(int) ImGuiKey.X] = (int) SdlScancode.SdlScancodeX;
+            ioKeyMap[(int) ImGuiKey.Y] = (int) SdlScancode.SdlScancodeY;
+            ioKeyMap[(int) ImGuiKey.Z] = (int) SdlScancode.SdlScancodeZ;
+            
+            io.KeyMap = ioKeyMap;
             
             _vboHandle = Gl.GenBuffer();
             _elementsHandle = Gl.GenBuffer();
@@ -375,7 +376,7 @@ namespace Alis.Sample.ImGui
                 
                 Gl.GlClearColor(0.05f, 0.05f, 0.05f, 1.00f);
                 
-                Extension.Graphic.ImGui.ImGui.NewFrame();
+                Extension.Graphic.ImGui.Native.ImGui.NewFrame();
                 
                 // Setup display size (every frame to accommodate for window resizing)
                 Vector2 windowSize = Sdl.GetWindowSize(_window);
@@ -399,50 +400,49 @@ namespace Alis.Sample.ImGui
                 
                 UpdateMousePosAndButtons();
                 
-                Extension.Graphic.ImGui.ImGui.PushFont(fontLoaded);
+                Extension.Graphic.ImGui.Native.ImGui.PushFont(fontLoaded);
                 
-                Extension.Graphic.ImGui.ImGui.BeginMainMenuBar();
-                if (Extension.Graphic.ImGui.ImGui.BeginMenu("Sample main menu"))
+                Extension.Graphic.ImGui.Native.ImGui.BeginMainMenuBar();
+                if (Extension.Graphic.ImGui.Native.ImGui.BeginMenu("Sample main menu"))
                 {
-                    Extension.Graphic.ImGui.ImGui.Separator();
-                    Extension.Graphic.ImGui.ImGui.Text("Sample text");
-                    Extension.Graphic.ImGui.ImGui.EndMenu();
+                    Extension.Graphic.ImGui.Native.ImGui.Separator();
+                    Extension.Graphic.ImGui.Native.ImGui.Text("Sample text");
+                    Extension.Graphic.ImGui.Native.ImGui.EndMenu();
                 }
                 
-                
-                Extension.Graphic.ImGui.ImGui.EndMainMenuBar();
+                Extension.Graphic.ImGui.Native.ImGui.EndMainMenuBar();
                 
                 
                 int sizeMenuDown = 25;
                 Vector2 sizeDock = viewport.Size - new Vector2(0, sizeMenuDown * 2);
                 
                 
-                Extension.Graphic.ImGui.ImGui.SetNextWindowPos(viewport.WorkPos);
-                Extension.Graphic.ImGui.ImGui.SetNextWindowSize(sizeDock);
+                Extension.Graphic.ImGui.Native.ImGui.SetNextWindowPos(viewport.WorkPos);
+                Extension.Graphic.ImGui.Native.ImGui.SetNextWindowSize(sizeDock);
                 //ImGui.SetNextWindowViewport(viewport.ID);
-                Extension.Graphic.ImGui.ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
-                Extension.Graphic.ImGui.ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
-                Extension.Graphic.ImGui.ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0.0f, 0.0f));
+                Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
+                Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
+                Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0.0f, 0.0f));
                 
                 
-                Extension.Graphic.ImGui.ImGui.Begin("DockSpace Demo", dockspaceflags);
+                Extension.Graphic.ImGui.Native.ImGui.Begin("DockSpace Demo", dockspaceflags);
                 // Submit the DockSpace
                 
-                Extension.Graphic.ImGui.ImGui.PopStyleVar(3);
+                Extension.Graphic.ImGui.Native.ImGui.PopStyleVar(3);
                 
-                uint dockSpaceId = Extension.Graphic.ImGui.ImGui.GetId("MyDockSpace");
-                Extension.Graphic.ImGui.ImGui.DockSpace(dockSpaceId, sizeDock);
+                uint dockSpaceId = Extension.Graphic.ImGui.Native.ImGui.GetId("MyDockSpace");
+                Extension.Graphic.ImGui.Native.ImGui.DockSpace(dockSpaceId, sizeDock);
                 
-                if (Extension.Graphic.ImGui.ImGui.BeginMenuBar())
+                if (Extension.Graphic.ImGui.Native.ImGui.BeginMenuBar())
                 {
-                    if (Extension.Graphic.ImGui.ImGui.BeginMenu("Options"))
+                    if (Extension.Graphic.ImGui.Native.ImGui.BeginMenu("Options"))
                     {
-                        Extension.Graphic.ImGui.ImGui.Separator();
-                        Extension.Graphic.ImGui.ImGui.Text("Sample text");
-                        Extension.Graphic.ImGui.ImGui.EndMenu();
+                        Extension.Graphic.ImGui.Native.ImGui.Separator();
+                        Extension.Graphic.ImGui.Native.ImGui.Text("Sample text");
+                        Extension.Graphic.ImGui.Native.ImGui.EndMenu();
                     }
                     
-                    Extension.Graphic.ImGui.ImGui.EndMenuBar();
+                    Extension.Graphic.ImGui.Native.ImGui.EndMenuBar();
                 }
                 
                 ShowDemos();
@@ -455,35 +455,35 @@ namespace Alis.Sample.ImGui
                     ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoBackground |
                     ImGuiWindowFlags.MenuBar;
                 
-                Extension.Graphic.ImGui.ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
-                Extension.Graphic.ImGui.ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
-                Extension.Graphic.ImGui.ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0.0f, 0.0f));
+                Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
+                Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
+                Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0.0f, 0.0f));
                 
-                Extension.Graphic.ImGui.ImGui.SetNextWindowPos(new Vector2(viewport.Pos.X, viewport.Pos.Y + (viewport.Size.Y - sizeMenuDown)));
-                Extension.Graphic.ImGui.ImGui.SetNextWindowSize(new Vector2(viewport.Size.X, sizeMenuDown));
-                if (Extension.Graphic.ImGui.ImGui.Begin("##MenuDown", ref menuDownState, styleGlagsMenuDown))
+                Extension.Graphic.ImGui.Native.ImGui.SetNextWindowPos(new Vector2(viewport.Pos.X, viewport.Pos.Y + (viewport.Size.Y - sizeMenuDown)));
+                Extension.Graphic.ImGui.Native.ImGui.SetNextWindowSize(new Vector2(viewport.Size.X, sizeMenuDown));
+                if (Extension.Graphic.ImGui.Native.ImGui.Begin("##MenuDown", ref menuDownState, styleGlagsMenuDown))
                 {
-                    Extension.Graphic.ImGui.ImGui.PopStyleVar(3);
-                    if (Extension.Graphic.ImGui.ImGui.BeginMenuBar())
+                    Extension.Graphic.ImGui.Native.ImGui.PopStyleVar(3);
+                    if (Extension.Graphic.ImGui.Native.ImGui.BeginMenuBar())
                     {
-                        Extension.Graphic.ImGui.ImGui.Text("Hello world from menu down");
+                        Extension.Graphic.ImGui.Native.ImGui.Text("Hello world from menu down");
                         
-                        Extension.Graphic.ImGui.ImGui.Button("sample");
+                        Extension.Graphic.ImGui.Native.ImGui.Button("sample");
                         
-                        Extension.Graphic.ImGui.ImGui.EndMenuBar();
+                        Extension.Graphic.ImGui.Native.ImGui.EndMenuBar();
                     }
                     
                     
-                    Extension.Graphic.ImGui.ImGui.End();
+                    Extension.Graphic.ImGui.Native.ImGui.End();
                 }
                 
                 
-                Extension.Graphic.ImGui.ImGui.End();
-                Extension.Graphic.ImGui.ImGui.PopFont();
+                Extension.Graphic.ImGui.Native.ImGui.End();
+                Extension.Graphic.ImGui.Native.ImGui.PopFont();
                 
                 
                 Sdl.MakeCurrent(_window, _glContext);
-                Extension.Graphic.ImGui.ImGui.Render();
+                Extension.Graphic.ImGui.Native.ImGui.Render();
                 
                 Gl.GlViewport(0, 0, (int) io.DisplaySize.X, (int) io.DisplaySize.Y);
                 Gl.GlClear(ClearBufferMask.ColorBufferBit);
@@ -492,8 +492,8 @@ namespace Alis.Sample.ImGui
                 
                 IntPtr backupCurrentWindow = Sdl.GetCurrentWindow();
                 IntPtr backupCurrentContext = Sdl.GetCurrentContext();
-                Extension.Graphic.ImGui.ImGui.UpdatePlatformWindows();
-                Extension.Graphic.ImGui.ImGui.RenderPlatformWindowsDefault();
+                Extension.Graphic.ImGui.Native.ImGui.UpdatePlatformWindows();
+                Extension.Graphic.ImGui.Native.ImGui.RenderPlatformWindowsDefault();
                 Sdl.MakeCurrent(backupCurrentWindow, backupCurrentContext);
                 
                 
@@ -521,32 +521,46 @@ namespace Alis.Sample.ImGui
         /// </summary>
         private void ShowDemos()
         {
-            Extension.Graphic.ImGui.ImGui.ShowDemoWindow();
+            Extension.Graphic.ImGui.Native.ImGui.ShowDemoWindow();
             
-            Extension.Graphic.ImGui.ImGui.Begin("simple node editor");
+            Extension.Graphic.ImGui.Native.ImGui.Begin("simple node editor");
             
             ImNodes.BeginNodeEditor();
             ImNodes.BeginNode(1);
             
             ImNodes.BeginNodeTitleBar();
-            Extension.Graphic.ImGui.ImGui.TextUnformatted("simple node :)");
+            Extension.Graphic.ImGui.Native.ImGui.TextUnformatted("simple node :)");
             ImNodes.EndNodeTitleBar();
             
             ImNodes.BeginInputAttribute(2);
-            Extension.Graphic.ImGui.ImGui.Text("input");
+            Extension.Graphic.ImGui.Native.ImGui.Text("input");
             ImNodes.EndInputAttribute();
             
             ImNodes.BeginOutputAttribute(3);
-            Extension.Graphic.ImGui.ImGui.Indent(40);
-            Extension.Graphic.ImGui.ImGui.Text("output");
+            Extension.Graphic.ImGui.Native.ImGui.Indent(40);
+            Extension.Graphic.ImGui.Native.ImGui.Text("output");
             ImNodes.EndOutputAttribute();
             
             ImNodes.EndNode();
             ImNodes.EndNodeEditor();
             
-            Extension.Graphic.ImGui.ImGui.End();
+            Extension.Graphic.ImGui.Native.ImGui.End();
             
             ImPlot.ShowDemoWindow();
+            
+            // Show simple plot of bars plot demo
+            Extension.Graphic.ImGui.Native.ImGui.Begin("Simple plot");
+            Extension.Graphic.ImGui.Native.ImGui.Text("Demonstrating a basic bar plot with horizontal and vertical bars.");
+            float[] data = new float[10] {3,2,4,4,5,6,6,8,9,10};
+           float[] lineData = new float[10] {3,2,4,4,5,6,6,8,9,10};
+            if (ImPlot.BeginPlot("Bar Plot")) {
+                ImPlot.PlotBars("Horizontal",  data, 10, 0.7, 1, ImPlotBarsFlags.None);
+                ImPlot.PlotLine("Vertical", lineData, 10, 1, 1, ImPlotLineFlags.None, 0);
+                ImPlot.EndPlot();
+            }
+            
+            Extension.Graphic.ImGui.Native.ImGui.End();
+            
         }
         
         /// <summary>
@@ -555,7 +569,7 @@ namespace Alis.Sample.ImGui
         /// <param name="evt">The evt</param>
         private void ProcessEvent(Event evt)
         {
-            ImGuiIoPtr imGuiIoPtr = Extension.Graphic.ImGui.ImGui.GetIo();
+            ImGuiIoPtr imGuiIoPtr = Extension.Graphic.ImGui.Native.ImGui.GetIo();
             switch (evt.type)
             {
                 case EventType.Mousewheel:
@@ -611,8 +625,9 @@ namespace Alis.Sample.ImGui
                 case EventType.Keyup:
                 {
                     SdlScancode key = evt.key.keySym.scancode;
-                    imGuiIoPtr.KeysDown[(int) key] = evt.type == EventType.Keydown;
-                    Logger.Info("io.KeysDown[" + key + "] = " + evt.type + imGuiIoPtr.KeysDown[(int) key]);
+                    RangeAccessor<bool> rangeAccessor = imGuiIoPtr.KeysDown;
+                    rangeAccessor[(int) key] = evt.type == EventType.Keydown;
+                    Logger.Info("io.KeysDown[" + key + "] = " + evt.type + rangeAccessor[(int) key]);
                     imGuiIoPtr.KeyShift = (Sdl.GetModState() & KeyMods.KModShift) != 0;
                     imGuiIoPtr.KeyCtrl = (Sdl.GetModState() & KeyMods.KModCtrl) != 0;
                     imGuiIoPtr.KeyAlt = (Sdl.GetModState() & KeyMods.KModAlt) != 0;
@@ -627,7 +642,7 @@ namespace Alis.Sample.ImGui
         /// </summary>
         private void UpdateMousePosAndButtons()
         {
-            ImGuiIoPtr imGuiIoPtr = Extension.Graphic.ImGui.ImGui.GetIo();
+            ImGuiIoPtr imGuiIoPtr = Extension.Graphic.ImGui.Native.ImGui.GetIo();
             
             // Set OS mouse position if requested (rarely used, only when ImGuiConfigFlags_NavEnableSetMousePos is enabled by user)
             if (imGuiIoPtr.WantSetMousePos)
@@ -640,12 +655,13 @@ namespace Alis.Sample.ImGui
             }
             
             uint mouseButtons = Sdl.GetMouseStateOutXAndY(out int mx, out int my);
-            imGuiIoPtr.MouseDown[0] =
+            RangeAccessor<bool> rangeAccessor = imGuiIoPtr.MouseDown;
+            rangeAccessor[0] =
                 _mousePressed[0] ||
                 (mouseButtons & Sdl.Button(Sdl.ButtonLeft)) !=
                 0; // If a mouse press event came, always pass it as "mouse held this frame", so we don't miss click-release events that are shorter than 1 frame.
-            imGuiIoPtr.MouseDown[1] = _mousePressed[1] || (mouseButtons & Sdl.Button(Sdl.ButtonRight)) != 0;
-            imGuiIoPtr.MouseDown[2] = _mousePressed[2] || (mouseButtons & Sdl.Button(Sdl.ButtonMiddle)) != 0;
+            rangeAccessor[1] = _mousePressed[1] || (mouseButtons & Sdl.Button(Sdl.ButtonRight)) != 0;
+            rangeAccessor[2] = _mousePressed[2] || (mouseButtons & Sdl.Button(Sdl.ButtonMiddle)) != 0;
             _mousePressed[0] = _mousePressed[1] = _mousePressed[2] = false;
             
             IntPtr focusedWindow = Sdl.GetKeyboardFocus();
@@ -661,7 +677,7 @@ namespace Alis.Sample.ImGui
             }
             
             // SDL_CaptureMouse() let the OS know e.g. that our imgui drag outside the SDL window boundaries shouldn't e.g. trigger the OS window resize cursor.
-            bool anyMouseButtonDown = Extension.Graphic.ImGui.ImGui.IsAnyMouseDown();
+            bool anyMouseButtonDown = Extension.Graphic.ImGui.Native.ImGui.IsAnyMouseDown();
             Sdl.CaptureMouse(anyMouseButtonDown);
         }
         
@@ -759,7 +775,7 @@ namespace Alis.Sample.ImGui
         /// </summary>
         private void RenderDrawData()
         {
-            ImDrawData drawData = Extension.Graphic.ImGui.ImGui.GetDrawData();
+            ImDrawData drawData = Extension.Graphic.ImGui.Native.ImGui.GetDrawData();
             
             // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
             int fbWidth = (int) (drawData.DisplaySize.X * drawData.FramebufferScale.X);
@@ -776,7 +792,7 @@ namespace Alis.Sample.ImGui
             
             drawData.ScaleClipRects(clipScale);
             
-            IntPtr lastTexId = Extension.Graphic.ImGui.ImGui.GetIo().Fonts.TexId;
+            IntPtr lastTexId = Extension.Graphic.ImGui.Native.ImGui.GetIo().Fonts.TexId;
             Gl.GlBindTexture(TextureTarget.Texture2D, (uint) lastTexId);
             
             int drawVertSize = Marshal.SizeOf<ImDrawVert>();
