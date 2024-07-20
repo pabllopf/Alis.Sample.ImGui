@@ -33,20 +33,47 @@ using Alis.Extension.Graphic.ImGui.Extras.Plot.Native;
 
 namespace Alis.Sample.ImGui.Demos
 {
+    /// <summary>
+    ///     The im plot demo class
+    /// </summary>
+    /// <seealso cref="IDemo" />
     public class ImPlotDemo : IDemo
     {
+        /// <summary>
+        /// Initializes this instance
+        /// </summary>
+        public void Initialize()
+        {
+        }
+
+        /// <summary>
+        /// Starts this instance
+        /// </summary>
+        public void Start()
+        {
+        }
+
+        /// <summary>
+        ///     Runs this instance
+        /// </summary>
         public void Run()
         {
             DefaultDemo();
             SimplePlot();
         }
-        
+
+        /// <summary>
+        ///     Defaults the demo
+        /// </summary>
         [Conditional("DEBUG")]
         private void DefaultDemo()
         {
             ImPlot.ShowDemoWindow();
         }
 
+        /// <summary>
+        ///     Simples the plot
+        /// </summary>
         [Conditional("DEBUG")]
         private void SimplePlot()
         {

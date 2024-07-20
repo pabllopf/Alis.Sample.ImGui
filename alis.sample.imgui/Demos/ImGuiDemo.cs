@@ -5,7 +5,7 @@
 //                              ░█─░█ ░█▄▄█ ▄█▄ ░█▄▄▄█
 // 
 //  --------------------------------------------------------------------------
-//  File:ImguiDemo.cs
+//  File:ImGuiDemo.cs
 // 
 //  Author:Pablo Perdomo Falcón
 //  Web:https://www.pabllopf.dev/
@@ -31,13 +31,37 @@ using System.Diagnostics;
 
 namespace Alis.Sample.ImGui.Demos
 {
+    /// <summary>
+    ///     The im gui demo class
+    /// </summary>
+    /// <seealso cref="IDemo" />
     public class ImGuiDemo : IDemo
     {
+        /// <summary>
+        /// Initializes this instance
+        /// </summary>
+        public void Initialize()
+        {
+        }
+
+        /// <summary>
+        /// Starts this instance
+        /// </summary>
+        public void Start()
+        {
+        }
+
+        /// <summary>
+        ///     Runs this instance
+        /// </summary>
         public void Run()
         {
             DefaultDemo();
         }
-        
+
+        /// <summary>
+        ///     Defaults the demo
+        /// </summary>
         [Conditional("DEBUG")]
         private void DefaultDemo()
         {

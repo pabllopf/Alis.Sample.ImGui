@@ -29,8 +29,24 @@
 
 namespace Alis.Sample.ImGui.Demos
 {
+    /// <summary>
+    ///     The demo interface
+    /// </summary>
     public interface IDemo
     {
+        /// <summary>
+        /// Initializes this instance
+        /// </summary>
+        public void Initialize();
+
+        /// <summary>
+        /// Starts this instance
+        /// </summary>
+        public void Start();
+
+        /// <summary>
+        ///     Runs this instance
+        /// </summary>
         public void Run();
     }
 }

@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using Alis.App.Engine.Fonts;
 using Alis.Core.Aspect.Data.Mapping;
 using Alis.Core.Aspect.Logging;
 using Alis.Core.Aspect.Math.Matrix;
@@ -47,11 +48,12 @@ using Alis.Extension.Graphic.OpenGL;
 using Alis.Extension.Graphic.OpenGL.Constructs;
 using Alis.Extension.Graphic.OpenGL.Enums;
 using Alis.Sample.ImGui.Shaders;
-using Type = Alis.Extension.Graphic.OpenGL.Enums.Type;
+using PixelFormat = Alis.Extension.Graphic.OpenGL.Enums.PixelFormat;
 using Version = Alis.Core.Graphic.Sdl2.Structs.Version;
 
 namespace Alis.Sample.ImGui
 {
+    
     /// <summary>
     ///     The engine class
     /// </summary>
@@ -66,9 +68,9 @@ namespace Alis.Sample.ImGui
         ///     The vertex shader
         /// </summary>
         private static readonly VertexShader VertexShader = new VertexShader();
-        
+
         /// <summary>
-        /// The fragment shader
+        ///     The fragment shader
         /// </summary>
         private static readonly FragmentShader FragmentShader = new FragmentShader();
 
@@ -97,11 +99,6 @@ namespace Alis.Sample.ImGui
         /// </summary>
         private readonly int widthWindow = 1080;
 
-        /// <summary>
-        ///     The windows
-        /// </summary>
-        private readonly SpaceWork spaceWork = new SpaceWork(); 
-        
         /// <summary>
         ///     The font texture id
         /// </summary>
@@ -141,12 +138,17 @@ namespace Alis.Sample.ImGui
         ///     The font texture id
         /// </summary>
         private uint _vertexArrayObject;
-        
+
         /// <summary>
         ///     The dockspaceflags
         /// </summary>
         private ImGuiWindowFlags dockspaceflags;
-        
+
+        /// <summary>
+        ///     The windows
+        /// </summary>
+        private Core.SpaceWork spaceWork = new Core.SpaceWork();
+
         /// <summary>
         ///     Starts this instance
         /// </summary>
@@ -154,27 +156,33 @@ namespace Alis.Sample.ImGui
         public void Start()
         {
             // initialize SDL and set a few defaults for the OpenGL context
-            if (Sdl.Init(InitSettings.InitVideo) != 0)
+            if (Sdl.Init(InitSettings.InitEverything) != 0)
             {
                 Logger.Info($@"Error of SDL2: {Sdl.GetError()}");
                 return;
             }
 
+            spaceWork = new Core.SpaceWork();
+
+            spaceWork.Initialize();
+
             // GET VERSION SDL2
             Version version = Sdl.GetVersion();
             Logger.Info(@$"SDL2 VERSION {version.major}.{version.minor}.{version.patch}");
 
-            // CONFIG THE SDL2 AN OPENGL CONFIGURATION
-            Sdl.SetAttributeByInt(GlAttr.SdlGlContextFlags, (int) GlContexts.SdlGlContextForwardCompatibleFlag);
-            Sdl.SetAttributeByProfile(GlAttr.SdlGlContextProfileMask, GlProfiles.SdlGlContextProfileCore);
-            Sdl.SetAttributeByInt(GlAttr.SdlGlContextMajorVersion, 3);
-            Sdl.SetAttributeByInt(GlAttr.SdlGlContextMinorVersion, 2);
+            Sdl.SetHint(Hint.HintRenderDriver, "opengl");
 
-            Sdl.SetAttributeByProfile(GlAttr.SdlGlContextProfileMask, GlProfiles.SdlGlContextProfileCore);
-            Sdl.SetAttributeByInt(GlAttr.SdlGlDoubleBuffer, 1);
-            Sdl.SetAttributeByInt(GlAttr.SdlGlDepthSize, 24);
-            Sdl.SetAttributeByInt(GlAttr.SdlGlAlphaSize, 8);
-            Sdl.SetAttributeByInt(GlAttr.SdlGlStencilSize, 8);
+            // CONFIG THE SDL2 AN OPENGL CONFIGURATION
+            Sdl.SetAttributeByInt(Attr.SdlGlContextFlags, (int) Contexts.SdlGlContextForwardCompatibleFlag);
+            Sdl.SetAttributeByProfile(Attr.SdlGlContextProfileMask, Profiles.SdlGlContextProfileCore);
+            Sdl.SetAttributeByInt(Attr.SdlGlContextMajorVersion, 4);
+            Sdl.SetAttributeByInt(Attr.SdlGlContextMinorVersion, 1);
+
+            Sdl.SetAttributeByProfile(Attr.SdlGlContextProfileMask, Profiles.SdlGlContextProfileCore);
+            Sdl.SetAttributeByInt(Attr.SdlGlDoubleBuffer, 1);
+            Sdl.SetAttributeByInt(Attr.SdlGlDepthSize, 24);
+            Sdl.SetAttributeByInt(Attr.SdlGlAlphaSize, 8);
+            Sdl.SetAttributeByInt(Attr.SdlGlStencilSize, 8);
 
             // Enable vsync
             Sdl.SetSwapInterval(1);
@@ -229,6 +237,8 @@ namespace Alis.Sample.ImGui
             string dirFonts = Environment.CurrentDirectory + "/Assets/Fonts/Jetbrains/";
             string fontToLoad = "JetBrainsMono-Bold.ttf";
 
+            string dirFontsIcon = Environment.CurrentDirectory + "/Assets/Icons/";
+
             if (!Directory.Exists(dirFonts))
             {
                 Logger.Info(@$"ERROR, DIR NOT FOUND: {dirFonts}");
@@ -241,20 +251,106 @@ namespace Alis.Sample.ImGui
                 return;
             }
 
-            fonts.AddFontDefault();
-            ImFontPtr fontLoaded = fonts.AddFontFromFileTtf(@$"{dirFonts}{fontToLoad}", 14);
+
+            //fonts.AddFontDefault();
+
+            float fontSize = 14;
+            float fontSizeIcon = 18;
+
+            ImFontPtr fontLoaded16Solid = fonts.AddFontFromFileTtf(@$"{dirFonts}{fontToLoad}", fontSize);
+            try
+            {
+                ImFontConfigPtr icons_config = Extension.Graphic.ImGui.Native.ImGui.ImFontConfig();
+                icons_config.MergeMode = true;
+                icons_config.SnapH = true;
+                icons_config.GlyphMinAdvanceX = 18;
+
+                ushort[] IconRanges = new ushort[3];
+                IconRanges[0] = FontAwesome5.IconMin;
+                IconRanges[1] = FontAwesome5.IconMax;
+                IconRanges[2] = 0;
+
+                // Allocate GCHandle to pin IconRanges in memory
+                GCHandle iconRangesHandle = GCHandle.Alloc(IconRanges, GCHandleType.Pinned);
+
+                IntPtr rangePtr = iconRangesHandle.AddrOfPinnedObject();
+
+                // Assuming 'io' is a valid ImGuiIO instance and 'dir' and 'dirIcon' are defined paths
+                fonts.AddFontFromFileTtf(@$"{dirFontsIcon}{FontAwesome5.NameSolid}", fontSizeIcon, icons_config, rangePtr);
+            }
+            catch (Exception e)
+            {
+                Logger.Exception(@$"ERROR, FONT ICONS NOT FOUND: {dirFontsIcon}{FontAwesome5.NameSolid} {e.Message}");
+                return;
+            }
+
+
+            ImFontPtr fontLoaded16Regular = fonts.AddFontFromFileTtf(@$"{dirFonts}{fontToLoad}", fontSize);
+            try
+            {
+                ImFontConfigPtr icons_config = Extension.Graphic.ImGui.Native.ImGui.ImFontConfig();
+                icons_config.MergeMode = true;
+                icons_config.SnapH = true;
+                icons_config.GlyphMinAdvanceX = 20;
+
+                ushort[] IconRanges = new ushort[3];
+                IconRanges[0] = FontAwesome5.IconMin;
+                IconRanges[1] = FontAwesome5.IconMax;
+                IconRanges[2] = 0;
+
+                // Allocate GCHandle to pin IconRanges in memory
+                GCHandle iconRangesHandle = GCHandle.Alloc(IconRanges, GCHandleType.Pinned);
+
+                IntPtr rangePtr = iconRangesHandle.AddrOfPinnedObject();
+
+                // Assuming 'io' is a valid ImGuiIO instance and 'dir' and 'dirIcon' are defined paths
+                fonts.AddFontFromFileTtf(@$"{dirFontsIcon}{FontAwesome5.NameRegular}", fontSizeIcon, icons_config, rangePtr);
+            }
+            catch (Exception e)
+            {
+                Logger.Exception(@$"ERROR, FONT ICONS NOT FOUND: {dirFontsIcon}{FontAwesome5.NameRegular} {e.Message}");
+                return;
+            }
+
+
+            ImFontPtr fontLoaded16Light = fonts.AddFontFromFileTtf(@$"{dirFonts}{fontToLoad}", fontSize);
+            try
+            {
+                ImFontConfigPtr icons_config = Extension.Graphic.ImGui.Native.ImGui.ImFontConfig();
+                icons_config.MergeMode = true;
+                icons_config.SnapH = true;
+                icons_config.GlyphMinAdvanceX = 20;
+
+                ushort[] IconRanges = new ushort[3];
+                IconRanges[0] = FontAwesome5.IconMin;
+                IconRanges[1] = FontAwesome5.IconMax;
+                IconRanges[2] = 0;
+
+                // Allocate GCHandle to pin IconRanges in memory
+                GCHandle iconRangesHandle = GCHandle.Alloc(IconRanges, GCHandleType.Pinned);
+
+                IntPtr rangePtr = iconRangesHandle.AddrOfPinnedObject();
+
+                // Assuming 'io' is a valid ImGuiIO instance and 'dir' and 'dirIcon' are defined paths
+                fonts.AddFontFromFileTtf(@$"{dirFontsIcon}{FontAwesome5.NameLight}", fontSizeIcon, icons_config, rangePtr);
+            }
+            catch (Exception e)
+            {
+                Logger.Exception(@$"ERROR, FONT ICONS NOT FOUND: {dirFontsIcon}{FontAwesome5.NameLight} {e.Message}");
+                return;
+            }
+
 
             fonts.GetTexDataAsRgba32(out IntPtr pixelData, out int width, out int height, out int _);
             _fontTextureId = LoadTexture(pixelData, width, height);
-
             fonts.TexId = (IntPtr) _fontTextureId;
             fonts.ClearTexData();
 
             // CONFIG DOCKSPACE
-           spaceWork.Viewport = Extension.Graphic.ImGui.Native.ImGui.GetMainViewport();
-            Extension.Graphic.ImGui.Native.ImGui.SetNextWindowPos(spaceWork.Viewport .WorkPos);
-            Extension.Graphic.ImGui.Native.ImGui.SetNextWindowSize(spaceWork.Viewport .WorkSize);
-            Extension.Graphic.ImGui.Native.ImGui.SetNextWindowViewport(spaceWork.Viewport .Id);
+            spaceWork.Viewport = Extension.Graphic.ImGui.Native.ImGui.GetMainViewport();
+            Extension.Graphic.ImGui.Native.ImGui.SetNextWindowPos(spaceWork.Viewport.WorkPos);
+            Extension.Graphic.ImGui.Native.ImGui.SetNextWindowSize(spaceWork.Viewport.WorkSize);
+            Extension.Graphic.ImGui.Native.ImGui.SetNextWindowViewport(spaceWork.Viewport.Id);
             Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
             Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
             dockspaceflags |= ImGuiWindowFlags.MenuBar;
@@ -296,6 +392,8 @@ namespace Alis.Sample.ImGui
             _elementsHandle = Gl.GenBuffer();
             _vertexArrayObject = Gl.GenVertexArray();
 
+
+            spaceWork.Start();
             while (!_quit)
             {
                 while (Sdl.PollEvent(out Event e) != 0)
@@ -303,14 +401,19 @@ namespace Alis.Sample.ImGui
                     ProcessEvent(e);
                     switch (e.type)
                     {
-                        case EventType.Quit:
+                        case EventType.WindowEvent:
                         {
-                            _quit = true;
+                            if (e.window.windowEvent == WindowEventId.SdlWindowEventClose)
+                            {
+                                _quit = true;
+                            }
+
                             break;
                         }
+
                         case EventType.Keydown:
                         {
-                            switch (e.key.keySym.sym)
+                            switch (e.key.KeySym.sym)
                             {
                                 case KeyCodes.Escape:
                                 case KeyCodes.Q:
@@ -323,9 +426,7 @@ namespace Alis.Sample.ImGui
                     }
                 }
 
-
-                Gl.GlClearColor(0.05f, 0.05f, 0.05f, 1.00f);
-
+                //Gl.GlClearColor(0.05f, 0.05f, 0.05f, 1.00f);
                 Extension.Graphic.ImGui.Native.ImGui.NewFrame();
                 ImGuizMo.BeginFrame();
 
@@ -351,13 +452,13 @@ namespace Alis.Sample.ImGui
 
                 UpdateMousePosAndButtons();
 
-                Extension.Graphic.ImGui.Native.ImGui.PushFont(fontLoaded);
-                
+                //ImGui.PushFont(fontLoaded);
+
                 int sizeMenuDown = 25;
-                Vector2 sizeDock = spaceWork.Viewport .Size - new Vector2(0, sizeMenuDown * 2);
+                Vector2 sizeDock = spaceWork.Viewport.Size - new Vector2(0, sizeMenuDown * 2);
 
 
-                Extension.Graphic.ImGui.Native.ImGui.SetNextWindowPos(spaceWork.Viewport .WorkPos);
+                Extension.Graphic.ImGui.Native.ImGui.SetNextWindowPos(spaceWork.Viewport.WorkPos);
                 Extension.Graphic.ImGui.Native.ImGui.SetNextWindowSize(sizeDock);
                 //ImGui.SetNextWindowViewport(spaceWork.Viewport .ID);
                 Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
@@ -372,14 +473,14 @@ namespace Alis.Sample.ImGui
 
                 uint dockSpaceId = Extension.Graphic.ImGui.Native.ImGui.GetId("MyDockSpace");
                 Extension.Graphic.ImGui.Native.ImGui.DockSpace(dockSpaceId, sizeDock);
-                
+
+
                 // RENDER SAMPLES AND CODE
                 spaceWork.Update();
-                
-                
+
                 Extension.Graphic.ImGui.Native.ImGui.End();
-                Extension.Graphic.ImGui.Native.ImGui.PopFont();
-                    
+                //ImGui.PopFont();
+
                 Sdl.MakeCurrent(spaceWork.Window, _glContext);
                 Extension.Graphic.ImGui.Native.ImGui.Render();
 
@@ -413,7 +514,8 @@ namespace Alis.Sample.ImGui
             Sdl.DestroyWindow(spaceWork.Window);
             Sdl.Quit();
         }
-        
+
+
         /// <summary>
         ///     Processes the event using the specified evt
         /// </summary>
@@ -475,7 +577,7 @@ namespace Alis.Sample.ImGui
                 case EventType.Keydown:
                 case EventType.Keyup:
                 {
-                    SdlScancode key = evt.key.keySym.scancode;
+                    SdlScancode key = evt.key.KeySym.scancode;
                     imGuiIoPtr.KeysDown[(int) key] = evt.type == EventType.Keydown;
                     Logger.Info("spaceWork.Io.KeysDown[" + key + "] = " + evt.type + imGuiIoPtr.KeysDown[(int) key]);
                     imGuiIoPtr.KeyShift = (Sdl.GetModState() & KeyMods.KModShift) != 0;
@@ -571,12 +673,12 @@ namespace Alis.Sample.ImGui
             int drawVertSize = Marshal.SizeOf<ImDrawVert>();
             // Manual offset calculations
             int posOffset = 0; // Offset of Pos is 0 bytes from the start
-            int uvOffset = 8;  // Offset of Uv is 8 bytes from the start (after Pos)
+            int uvOffset = 8; // Offset of Uv is 8 bytes from the start (after Pos)
             int colOffset = 16; // Offset of Col is 16 bytes from the start (after Pos and Uv)
 
-            Gl.VertexAttribPointer(_shader["Position"].Location, 2, VertexAttribPointerType.Float, false, drawVertSize, (IntPtr)posOffset);
-            Gl.VertexAttribPointer(_shader["UV"].Location, 2, VertexAttribPointerType.Float, false, drawVertSize, (IntPtr)uvOffset);
-            Gl.VertexAttribPointer(_shader["Color"].Location, 4, VertexAttribPointerType.UnsignedByte, true, drawVertSize, (IntPtr)colOffset);
+            Gl.VertexAttribPointer(_shader["Position"].Location, 2, VertexAttribPointerType.Float, false, drawVertSize, (IntPtr) posOffset);
+            Gl.VertexAttribPointer(_shader["UV"].Location, 2, VertexAttribPointerType.Float, false, drawVertSize, (IntPtr) uvOffset);
+            Gl.VertexAttribPointer(_shader["Color"].Location, 4, VertexAttribPointerType.UnsignedByte, true, drawVertSize, (IntPtr) colOffset);
         }
 
 
@@ -615,12 +717,12 @@ namespace Alis.Sample.ImGui
         /// <param name="format">The format</param>
         /// <param name="internalFormat">The internal format</param>
         /// <returns>The texture id</returns>
-        private static uint LoadTexture(IntPtr pixelData, int width, int height, Format format = Format.Rgba, InternalFormat internalFormat = InternalFormat.Rgba)
+        private static uint LoadTexture(IntPtr pixelData, int width, int height, PixelFormat format = PixelFormat.Rgba, PixelInternalFormat internalFormat = PixelInternalFormat.Rgba)
         {
             uint textureId = Gl.GenTexture();
             Gl.GlPixelStorei(StoreParameter.UnpackAlignment, 1);
             Gl.GlBindTexture(TextureTarget.Texture2D, textureId);
-            Gl.GlTexImage2D(TextureTarget.Texture2D, 0, internalFormat, width, height, 0, format, Type.UnsignedByte, pixelData);
+            Gl.GlTexImage2D(TextureTarget.Texture2D, 0, internalFormat, width, height, 0, format, PixelType.UnsignedByte, pixelData);
             Gl.GlTexParameteri(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, TextureParameter.Linear);
             Gl.GlTexParameteri(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, TextureParameter.Linear);
             Gl.GlBindTexture(TextureTarget.Texture2D, 0);

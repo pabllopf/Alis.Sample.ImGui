@@ -32,14 +32,37 @@ using Alis.Extension.Graphic.ImGui.Extras.Node;
 
 namespace Alis.Sample.ImGui.Demos
 {
+    /// <summary>
+    ///     The im node demo class
+    /// </summary>
+    /// <seealso cref="IDemo" />
     public class ImNodeDemo : IDemo
     {
-      
-        public void Run()
+        /// <summary>
+        /// Initializes this instance
+        /// </summary>
+        public void Initialize()
         {
-              DefaultDemo();
         }
 
+        /// <summary>
+        /// Starts this instance
+        /// </summary>
+        public void Start()
+        {
+        }
+
+        /// <summary>
+        ///     Runs this instance
+        /// </summary>
+        public void Run()
+        {
+            DefaultDemo();
+        }
+
+        /// <summary>
+        ///     Defaults the demo
+        /// </summary>
         [Conditional("DEBUG")]
         private void DefaultDemo()
         {
