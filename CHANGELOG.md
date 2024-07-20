@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.1.4] - 2024-07-20
+### :sparkles: New Features
+- [`8d10833`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/8d10833853d850e62f39c5fd5a925135bf457ea1) - new builds on deploy *(commit by [@pabllopf](https://github.com/pabllopf))*
+
+### :bug: Bug Fixes
+- [`dc960a6`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/dc960a62e136d999f148dbd94365f58dbb458b8c) - gitignore *(commit by [@pabllopf](https://github.com/pabllopf))*
+- [`814b296`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/814b296d7080a0199e28d9d8c1e25478d3b1a117) - delete unsafe code *(commit by [@pabllopf](https://github.com/pabllopf))*
+- [`d2a9192`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/d2a91920fbb462e30d3aae9482bdc65c4f210f34) - update to .net8.0 *(commit by [@pabllopf](https://github.com/pabllopf))*
+
+
 ## [v0.1.2] - 2024-07-07
 ### :bug: Bug Fixes
 - [`e51536b`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/e51536bfa691b5f254b5b3b5562807702466a4d0) - refactor demo and include new samples *(commit by [@pabllopf](https://github.com/pabllopf))*
@@ -86,3 +96,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v0.1.0]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.0.0...v0.1.0
 [v0.1.1]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.1.0...v0.1.1
 [v0.1.2]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.1.1...v0.1.2
+[v0.1.4]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.1.3...v0.1.4
