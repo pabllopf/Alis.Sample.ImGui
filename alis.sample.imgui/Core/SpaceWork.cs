@@ -32,6 +32,7 @@ using Alis.Core.Aspect.Math.Definition;
 using Alis.Core.Ecs;
 using Alis.Core.Ecs.Component.Render;
 using Alis.Core.Ecs.Entity;
+using Alis.Core.Ecs.System;
 using Alis.Extension.Graphic.ImGui;
 using Alis.Sample.ImGui.Demos;
 
@@ -107,8 +108,7 @@ namespace Alis.Sample.ImGui.Core
         /// </summary>
         public SpaceWork()
         {
-            VideoGame = VideoGame
-                .Builder()
+            videoGame = VideoGame.Create()
                 .Settings(setting => setting
                     .General(general => general
                         .Name("Rogue Legacy")
@@ -219,7 +219,7 @@ namespace Alis.Sample.ImGui.Core
                             .Build())
                         .Build())
                     .Build())
-                .BuildPreview();
+                .Build();
         }
         
         /// <summary>
@@ -230,14 +230,14 @@ namespace Alis.Sample.ImGui.Core
         /// <summary>
         /// Gets the value of the video game
         /// </summary>
-        public VideoGame VideoGame { get; }
+        public VideoGame videoGame { get; }
 
         /// <summary>
         /// Initializes this instance
         /// </summary>
         public void Initialize()
         {
-            VideoGame.InitPreview();
+            videoGame.StartPreview();
 
             imGuiDemo.Initialize();
             imPlotDemo.Initialize();
