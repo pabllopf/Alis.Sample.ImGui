@@ -209,7 +209,7 @@ namespace Alis.Sample.ImGui
 
             spaceWork.Io = Extension.Graphic.ImGui.Native.ImGui.GetIo();
 
-            spaceWork.Io.DisplaySize = new Vector2(800, 600);
+            spaceWork.Io.DisplaySize = new Vector2F(800, 600);
 
             Logger.Info($@"IMGUI VERSION {Extension.Graphic.ImGui.Native.ImGui.GetVersion()}");
 
@@ -361,7 +361,7 @@ namespace Alis.Sample.ImGui
             spaceWork.Style = Extension.Graphic.ImGui.Native.ImGui.GetStyle();
             Extension.Graphic.ImGui.Native.ImGui.StyleColorsDark();
             spaceWork.Style.WindowRounding = 0.0f;
-            spaceWork.Style.Colors2 = new Vector4(0.00f, 0.00f, 0.00f, 1.00f);
+            spaceWork.Style.Colors2 = new Vector4F(0.00f, 0.00f, 0.00f, 1.00f);
 
             // config input manager 
 
@@ -431,12 +431,12 @@ namespace Alis.Sample.ImGui
                 ImGuizMo.BeginFrame();
 
                 // Setup display size (every frame to accommodate for window resizing)
-                Vector2 windowSize = Sdl.GetWindowSize(spaceWork.Window);
+                Vector2F windowSize = Sdl.GetWindowSize(spaceWork.Window);
                 Sdl.GetDrawableSize(spaceWork.Window, out int displayW, out int displayH);
-                spaceWork.Io.DisplaySize = new Vector2(windowSize.X, windowSize.Y);
+                spaceWork.Io.DisplaySize = new Vector2F(windowSize.X, windowSize.Y);
                 if ((windowSize.X > 0) && (windowSize.Y > 0))
                 {
-                    spaceWork.Io.DisplayFramebufferScale = new Vector2(displayW / windowSize.X, displayH / windowSize.Y);
+                    spaceWork.Io.DisplayFramebufferScale = new Vector2F(displayW / windowSize.X, displayH / windowSize.Y);
                 }
 
                 // Setup time step (we don't use SDL_GetTicks() because it is using millisecond resolution)
@@ -455,7 +455,7 @@ namespace Alis.Sample.ImGui
                 //ImGui.PushFont(fontLoaded);
 
                 int sizeMenuDown = 25;
-                Vector2 sizeDock = spaceWork.Viewport.Size - new Vector2(0, sizeMenuDown * 2);
+                Vector2F sizeDock = spaceWork.Viewport.Size - new Vector2F(0, sizeMenuDown * 2);
 
 
                 Extension.Graphic.ImGui.Native.ImGui.SetNextWindowPos(spaceWork.Viewport.WorkPos);
@@ -463,7 +463,7 @@ namespace Alis.Sample.ImGui
                 //ImGui.SetNextWindowViewport(spaceWork.Viewport .ID);
                 Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
                 Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
-                Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0.0f, 0.0f));
+                Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2F(0.0f, 0.0f));
 
 
                 Extension.Graphic.ImGui.Native.ImGui.Begin("DockSpace Demo", dockspaceflags);
@@ -603,7 +603,7 @@ namespace Alis.Sample.ImGui
             }
             else
             {
-                imGuiIoPtr.MousePos = new Vector2(float.MinValue, float.MinValue);
+                imGuiIoPtr.MousePos = new Vector2F(float.MinValue, float.MinValue);
             }
 
             uint mouseButtons = Sdl.GetMouseStateOutXAndY(out int mx, out int my);
@@ -627,7 +627,7 @@ namespace Alis.Sample.ImGui
                 Sdl.GetGlobalMouseStateOutXAndOutY(out mx, out my);
                 mx -= wx;
                 my -= wy;
-                imGuiIoPtr.MousePos = new Vector2(mx, my);
+                imGuiIoPtr.MousePos = new Vector2F(mx, my);
             }
 
             // SDL_CaptureMouse() let the OS know e.g. that our imgui drag outside the SDL window boundaries shouldn't e.g. trigger the OS window resize cursor.
@@ -746,8 +746,8 @@ namespace Alis.Sample.ImGui
 
             SetupRenderState(drawData);
 
-            Vector2 clipOffset = drawData.DisplayPos;
-            Vector2 clipScale = drawData.FramebufferScale;
+            Vector2F clipOffset = drawData.DisplayPos;
+            Vector2F clipScale = drawData.FramebufferScale;
 
             drawData.ScaleClipRects(clipScale);
 
@@ -775,7 +775,7 @@ namespace Alis.Sample.ImGui
                     else
                     {
                         // Project scissor/clipping rectangles into framebuffer space
-                        Vector4 clipRect = pcmd.ClipRect;
+                        Vector4F clipRect = pcmd.ClipRect;
 
                         clipRect.X = pcmd.ClipRect.X - clipOffset.X;
                         clipRect.Y = pcmd.ClipRect.Y - clipOffset.Y;

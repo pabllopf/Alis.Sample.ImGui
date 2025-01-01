@@ -181,11 +181,11 @@ namespace Alis.Sample.ImGui.Demos
                 Extension.Graphic.ImGui.Native.ImGui.Text("This is some useful text.");
                 Extension.Graphic.ImGui.Native.ImGui.Image(
                     texture,
-                    new Vector2(100, 100),
-                    new Vector2(1, 1),
-                    new Vector2(1, 1),
-                    new Vector4(1, 1, 1, 1),
-                    new Vector4(255, 0, 0, 255));
+                    new Vector2F(100, 100),
+                    new Vector2F(1, 1),
+                    new Vector2F(1, 1),
+                    new Vector4F(1, 1, 1, 1),
+                    new Vector4F(255, 0, 0, 255));
             }
 
             Extension.Graphic.ImGui.Native.ImGui.End();
