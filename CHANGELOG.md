@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.2.0] - 2025-02-02
+### :bug: Bug Fixes
+- [`56795a1`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/56795a1846a78bf99f952d5b9931928847e9939a) - version size dlls *(commit by [@pabllopf](https://github.com/pabllopf))*
+- [`dc54577`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/dc54577824e508e6e3d21512a769b2894fa6ef9f) - build trim *(commit by [@pabllopf](https://github.com/pabllopf))*
+
+
 ## [v0.1.9] - 2025-02-02
 ### :bug: Bug Fixes
 - [`b08da07`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/b08da07ac6a7fc4a667f0b99ddae783f140b81a0) - optimize size dlls *(commit by [@pabllopf](https://github.com/pabllopf))*
@@ -127,3 +133,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v0.1.7]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.1.6...v0.1.7
 [v0.1.8]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.1.7...v0.1.8
 [v0.1.9]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.1.8...v0.1.9
+[v0.2.0]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.1.9...v0.2.0
