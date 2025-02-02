@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.1.8] - 2025-02-02
+### :bug: Bug Fixes
+- [`62e27e8`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/62e27e8f32c7e3a7fab25768e0c7f9f90bd50a7e) - new version of alis *(commit by [@pabllopf](https://github.com/pabllopf))*
+
+
 ## [v0.1.7] - 2025-01-07
 ### :bug: Bug Fixes
 - [`0da1368`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/0da136875145e1468f99a5908199ebbd8dba9bf5) - update readme file *(commit by [@pabllopf](https://github.com/pabllopf))*
@@ -115,3 +120,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v0.1.5]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.1.4...v0.1.5
 [v0.1.6]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.1.5...v0.1.6
 [v0.1.7]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.1.6...v0.1.7
+[v0.1.8]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.1.7...v0.1.8
