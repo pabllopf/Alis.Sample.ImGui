@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.2.2] - 2025-03-08
+### :bug: Bug Fixes
+- [`33b20e2`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/33b20e2c2153adf23df1b538a2426a4f3533d2f2) - the references and new version of sdl2 and glfw *(commit by [@pabllopf](https://github.com/pabllopf))*
+
+
 ## [v0.2.1] - 2025-02-02
 ### :bug: Bug Fixes
 - [`a5fb071`](https://github.com/pabllopf/Alis.Sample.ImGui/commit/a5fb07104c2f582845595cb1945bdebaf7456e2a) - size dlls *(commit by [@pabllopf](https://github.com/pabllopf))*
@@ -140,3 +145,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v0.1.9]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.1.8...v0.1.9
 [v0.2.0]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.1.9...v0.2.0
 [v0.2.1]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.2.0...v0.2.1
+[v0.2.2]: https://github.com/pabllopf/Alis.Sample.ImGui/compare/v0.2.1...v0.2.2
