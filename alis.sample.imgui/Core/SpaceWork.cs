@@ -121,10 +121,7 @@ namespace Alis.Sample.ImGui.Core
                     .Audio(audio => audio
                         .Build())
                     .Graphic(graphic => graphic
-                        .Window(window => window
-                            .Resolution(1024, 640)
-                            .Background(Color.Black)
-                            .Build())
+                        .Resolution(1024, 640)
                         .Build())
                     .Physic(physic => physic
                         .Gravity(0.0f, -9.8f)

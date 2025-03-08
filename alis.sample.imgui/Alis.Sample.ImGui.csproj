@@ -21,7 +21,7 @@
     <ItemGroup>
         <PackageReference Include="Alis" Version="*" />
         <PackageReference Include="Alis.Extension.Graphic.ImGui" Version="*" />
-        <PackageReference Include="Alis.Extension.Graphic.OpenGL" Version="*" />
+        <PackageReference Include="Alis.Extension.Graphic.Sdl2" Version="*" />
     </ItemGroup>
 
 </Project>
