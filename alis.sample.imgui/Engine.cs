@@ -33,27 +33,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using Alis.App.Engine.Fonts;
-using Alis.Core.Aspect.Data.Mapping;
-using Alis.Core.Aspect.Logging;
-using Alis.Core.Aspect.Math.Matrix;
-using Alis.Core.Aspect.Math.Vector;
-using Alis.Core.Graphic.OpenGL;
-using Alis.Core.Graphic.OpenGL.Constructs;
-using Alis.Core.Graphic.OpenGL.Enums;
-
-
-using Alis.Extension.Graphic.ImGui;
-using Alis.Extension.Graphic.ImGui.Extras.GuizMo;
-using Alis.Extension.Graphic.ImGui.Extras.Node;
-using Alis.Extension.Graphic.ImGui.Extras.Plot.Native;
-
-
-using Alis.Extension.Graphic.Sdl2;
-using Alis.Extension.Graphic.Sdl2.Enums;
-using Alis.Extension.Graphic.Sdl2.Structs;
 using Alis.Sample.ImGui.Shaders;
-using PixelFormat = Alis.Core.Graphic.OpenGL.Enums.PixelFormat;
-using Version = System.Version;
 
 namespace Alis.Sample.ImGui
 {
