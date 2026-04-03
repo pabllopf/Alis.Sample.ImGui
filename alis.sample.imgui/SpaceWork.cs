@@ -28,7 +28,6 @@
 //  --------------------------------------------------------------------------
 
 using System;
-using Alis.Extension.Graphic.ImGui;
 using Alis.Sample.ImGui.Demos;
 
 namespace Alis.Sample.ImGui
