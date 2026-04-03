@@ -28,9 +28,6 @@
 //  --------------------------------------------------------------------------
 
 using System.Diagnostics;
-using Alis.Core.Aspect.Math.Vector;
-using Alis.Extension.Graphic.ImGui;
-using Alis.Extension.Graphic.ImGui.Extras.GuizMo;
 
 namespace Alis.Sample.ImGui.Demos
 {

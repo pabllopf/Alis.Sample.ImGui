@@ -30,12 +30,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Alis.Core.Aspect.Math.Shape.Rectangle;
-using Alis.Core.Aspect.Math.Vector;
-using Alis.Core.Graphic.OpenGL;
-using Alis.Core.Graphic.OpenGL.Enums;
 using Alis.Extension.Graphic.ImGui;
-using Alis.Extension.Graphic.Sdl2;
 
 
 namespace Alis.Sample.ImGui.Demos

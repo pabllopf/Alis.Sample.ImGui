@@ -28,12 +28,6 @@
 //  --------------------------------------------------------------------------
 
 using System;
-using Alis.Core.Aspect.Math.Definition;
-using Alis.Core.Ecs;
-using Alis.Core.Ecs.Component.Render;
-using Alis.Core.Ecs.Entity;
-using Alis.Core.Ecs.System;
-using Alis.Extension.Graphic.ImGui;
 using Alis.Sample.ImGui.Demos;
 
 namespace Alis.Sample.ImGui.Core
