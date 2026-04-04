@@ -39,7 +39,6 @@
     <ItemGroup>
         <PackageReference Include="Alis" Version="*" />
         <PackageReference Include="Alis.Extension.Graphic.Sdl2" Version="*" />
-        <PackageReference Include="Alis.Extension.Graphic.Ui" Version="*" />
     </ItemGroup>
 
 </Project>

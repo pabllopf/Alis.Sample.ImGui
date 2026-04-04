@@ -30,7 +30,6 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Alis.Extension.Graphic.ImGui;
 
 
 namespace Alis.Sample.ImGui.Demos

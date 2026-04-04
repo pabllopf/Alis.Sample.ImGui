@@ -34,6 +34,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Alis.App.Engine.Fonts;
 using Alis.Sample.ImGui.Shaders;
+using Alis.Extension.Graphic.Ui;
 
 namespace Alis.Sample.ImGui
 {
@@ -107,7 +108,7 @@ namespace Alis.Sample.ImGui
         ///     The shader
         /// </summary>
         private GlShaderProgram _shader;
-
+        
         /// <summary>
         ///     The time
         /// </summary>
