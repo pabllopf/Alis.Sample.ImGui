@@ -5,7 +5,7 @@
 //                              ░█─░█ ░█▄▄█ ▄█▄ ░█▄▄▄█
 // 
 //  --------------------------------------------------------------------------
-//  File:IFont.cs
+//  File:IShader.cs
 // 
 //  Author:Pablo Perdomo Falcón
 //  Web:https://www.pabllopf.dev/
@@ -27,12 +27,16 @@
 // 
 //  --------------------------------------------------------------------------
 
-namespace Alis.Sample.ImGui.Fonts
+namespace Alis.Sample.ImGuiWithSdl2.Shaders
 {
     /// <summary>
-    ///     The font interface
+    ///     The shader interface
     /// </summary>
-    public interface IFont
+    public interface IShader
     {
+        /// <summary>
+        ///     Gets the value of the shader code
+        /// </summary>
+        public string ShaderCode { get; }
     }
 }

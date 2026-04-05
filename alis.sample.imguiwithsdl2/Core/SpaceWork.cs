@@ -28,9 +28,14 @@
 //  --------------------------------------------------------------------------
 
 using System;
-using Alis.Sample.ImGui.Demos;
+using Alis.Core.Aspect.Math.Definition;
+using Alis.Core.Ecs;
+using Alis.Core.Ecs.Components.Render;
+using Alis.Core.Ecs.Systems;
+using Alis.Extension.Graphic.Ui;
+using Alis.Sample.ImGuiWithSdl2.Demos;
 
-namespace Alis.Sample.ImGui.Core
+namespace Alis.Sample.ImGuiWithSdl2.Core
 {
     /// <summary>
     ///     The space work class
@@ -127,35 +132,35 @@ namespace Alis.Sample.ImGui.Core
                     .Add<Scene>(gameScene => gameScene
                         .Add<GameObject>(gameObject => gameObject
                             .Name("Player")
-                            .WithTag("Player")
+                            .Tag("Player")
                             .Transform(transform => transform
                                 .Position(0, 0)
                                 .Scale(2, 2)
                                 .Rotation(0)
                                 .Build())
-                            .AddComponent<Sprite>(sprite => sprite.Builder()
+                            .WithComponent<Sprite>(sprite => sprite
                                 .SetTexture("tile000.bmp")
                                 .Build())
-                            .AddComponent<Animator>(animator => animator.Builder()
+                            .WithComponent<Animator>(animator => animator
                                 .AddAnimation(animation => animation
                                     .Name("Idle")
                                     .Order(0)
                                     .Speed(0.2f)
                                     .AddFrame(frame => frame
-                                        .FilePath("tile000.bmp")
+                                        .File("tile000.bmp")
                                         .Build())
                                     .AddFrame(frame => frame
-                                        .FilePath("tile001.bmp")
+                                        .File("tile001.bmp")
                                         .Build())
                                     .AddFrame(frame => frame
-                                        .FilePath("tile002.bmp")
+                                        .File("tile002.bmp")
                                         .Build())
                                     .AddFrame(frame => frame
-                                        .FilePath("tile003.bmp")
+                                        .File("tile003.bmp")
                                         .Build())
                                     .Build())
                                 .Build())
-                            .AddComponent<Camera>(camera => camera.Builder()
+                            .WithComponent<Camera>(camera => camera
                                 .Resolution(1024, 640)
                                 .BackgroundColor(Color.DarkGreen)
                                 .Build())
@@ -169,7 +174,7 @@ namespace Alis.Sample.ImGui.Core
                                 .Scale(2, 2)
                                 .Rotation(0)
                                 .Build())
-                            .AddComponent<Sprite>(sprite => sprite.Builder()
+                            .WithComponent<Sprite>(sprite => sprite
                                 .SetTexture("tree-001.bmp")
                                 .Build())
                             .Build())
@@ -182,7 +187,7 @@ namespace Alis.Sample.ImGui.Core
                                 .Scale(2, 2)
                                 .Rotation(0)
                                 .Build())
-                            .AddComponent<Sprite>(sprite => sprite.Builder()
+                            .WithComponent<Sprite>(sprite => sprite
                                 .SetTexture("tree-001.bmp")
                                 .Build())
                             .Build())
@@ -193,7 +198,7 @@ namespace Alis.Sample.ImGui.Core
                                 .Scale(2, 2)
                                 .Rotation(0)
                                 .Build())
-                            .AddComponent<Sprite>(sprite => sprite.Builder()
+                            .WithComponent<Sprite>(sprite => sprite
                                 .SetTexture("tree-001.bmp")
                                 .Build())
                             .Build())
@@ -204,7 +209,7 @@ namespace Alis.Sample.ImGui.Core
                                 .Scale(2, 2)
                                 .Rotation(0)
                                 .Build())
-                            .AddComponent<Sprite>(sprite => sprite.Builder()
+                            .WithComponent<Sprite>(sprite => sprite
                                 .SetTexture("tree-001.bmp")
                                 .Build())
                             .Build())
@@ -228,7 +233,7 @@ namespace Alis.Sample.ImGui.Core
         /// </summary>
         public void Initialize()
         {
-            videoGame.StartPreview();
+            videoGame.InitPreview();
 
             imGuiDemo.Initialize();
             imPlotDemo.Initialize();

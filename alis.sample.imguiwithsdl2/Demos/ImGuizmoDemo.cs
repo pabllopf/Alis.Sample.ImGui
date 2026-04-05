@@ -28,8 +28,11 @@
 //  --------------------------------------------------------------------------
 
 using System.Diagnostics;
+using Alis.Core.Aspect.Math.Vector;
+using Alis.Extension.Graphic.Ui;
+using Alis.Extension.Graphic.Ui.Extras.GuizMo;
 
-namespace Alis.Sample.ImGui.Demos
+namespace Alis.Sample.ImGuiWithSdl2.Demos
 {
     /// <summary>
     ///     The im guizmo demo class
@@ -144,16 +147,16 @@ namespace Alis.Sample.ImGui.Demos
         [Conditional("DEBUG")]
         private void SimpleSample()
         {
-            Extension.Graphic.ImGui.Native.ImGui.PushStyleColor(ImGuiCol.WindowBg, new Vector4F(0.35f, 0.3f, 0.3f, 1.0f));
+            ImGui.PushStyleColor(ImGuiCol.WindowBg, new Vector4F(0.35f, 0.3f, 0.3f, 1.0f));
 
 
-            if (Extension.Graphic.ImGui.Native.ImGui.Begin("Gizmo", ref isOpen))
+            if (ImGui.Begin("Gizmo", ref isOpen))
             {
                 ImGuizMo.Enable(true);
                 ImGuizMo.SetDrawList();
 
-                Extension.Graphic.ImGui.Native.ImGui.Text("ImGuizmo is a small library that allows you to manipulate 3D objects in the scene.");
-                Extension.Graphic.ImGui.Native.ImGui.Text("You can use it to move, rotate and scale objects in the scene.");
+                ImGui.Text("ImGuizmo is a small library that allows you to manipulate 3D objects in the scene.");
+                ImGui.Text("You can use it to move, rotate and scale objects in the scene.");
 
                 ImGuizMo.DecomposeMatrixToComponents(ref matrix, ref matrixTranslation, ref matrixRotation, ref matrixScale);
 
@@ -169,9 +172,9 @@ namespace Alis.Sample.ImGui.Demos
                 scale.Y = matrixScale[1];
                 scale.Z = matrixScale[2];
 
-                Extension.Graphic.ImGui.Native.ImGui.SliderFloat3("Translation", ref translation, -10.0f, 10.0f);
-                Extension.Graphic.ImGui.Native.ImGui.SliderFloat3("Rotation", ref rotation, -180.0f, 180.0f);
-                Extension.Graphic.ImGui.Native.ImGui.SliderFloat3("Scale", ref scale, 0.1f, 10.0f);
+                ImGui.SliderFloat3("Translation", ref translation, -10.0f, 10.0f);
+                ImGui.SliderFloat3("Rotation", ref rotation, -180.0f, 180.0f);
+                ImGui.SliderFloat3("Scale", ref scale, 0.1f, 10.0f);
 
                 matrixTranslation[0] = translation.X;
                 matrixTranslation[1] = translation.Y;
@@ -187,22 +190,22 @@ namespace Alis.Sample.ImGui.Demos
 
                 ImGuizMo.RecomposeMatrixFromComponents(ref matrixTranslation, ref matrixRotation, ref matrixScale, ref matrix);
 
-                Extension.Graphic.ImGui.Native.ImGui.Text($"Translation: {translation}");
-                Extension.Graphic.ImGui.Native.ImGui.Text($"Rotation: {rotation}");
-                Extension.Graphic.ImGui.Native.ImGui.Text($"Scale: {scale}");
+                ImGui.Text($"Translation: {translation}");
+                ImGui.Text($"Rotation: {rotation}");
+                ImGui.Text($"Scale: {scale}");
 
                 ImGuizMo.SetOrthographic(false);
-                ImGuizMo.SetRect(0, 0, Extension.Graphic.ImGui.Native.ImGui.GetIo().DisplaySize.X, Extension.Graphic.ImGui.Native.ImGui.GetIo().DisplaySize.Y);
+                ImGuizMo.SetRect(0, 0,ImGui.GetIo().DisplaySize.X,ImGui.GetIo().DisplaySize.Y);
 
                 ImGuizMo.DrawGrid(ref cameraView, ref cameraProjection, ref identityMatrix, 10.0f);
                 ImGuizMo.Manipulate(cameraView, cameraProjection, Operation.Translate | Operation.Rotate | Operation.Scale, Mode.Local, matrix);
 
-                ImGuizMo.ViewManipulate(ref cameraView, 2.5f, new Vector2F(Extension.Graphic.ImGui.Native.ImGui.GetWindowPos().X, Extension.Graphic.ImGui.Native.ImGui.GetWindowPos().Y), new Vector2F(Extension.Graphic.ImGui.Native.ImGui.GetWindowWidth(), Extension.Graphic.ImGui.Native.ImGui.GetWindowHeight()), 0x10101010);
+                ImGuizMo.ViewManipulate(ref cameraView, 2.5f, new Vector2F(ImGui.GetWindowPos().X,ImGui.GetWindowPos().Y), new Vector2F(ImGui.GetWindowWidth(),ImGui.GetWindowHeight()), 0x10101010);
             }
 
 
-            Extension.Graphic.ImGui.Native.ImGui.End();
-            Extension.Graphic.ImGui.Native.ImGui.PopStyleColor();
+            ImGui.End();
+            ImGui.PopStyleColor();
         }
     }
 }

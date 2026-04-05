@@ -5,7 +5,7 @@
 //                              ░█─░█ ░█▄▄█ ▄█▄ ░█▄▄▄█
 // 
 //  --------------------------------------------------------------------------
-//  File:ImPlotDemo.cs
+//  File:ImGuiDemo.cs
 // 
 //  Author:Pablo Perdomo Falcón
 //  Web:https://www.pabllopf.dev/
@@ -28,14 +28,15 @@
 //  --------------------------------------------------------------------------
 
 using System.Diagnostics;
+using Alis.Extension.Graphic.Ui;
 
-namespace Alis.Sample.ImGui.Demos
+namespace Alis.Sample.ImGuiWithSdl2.Demos
 {
     /// <summary>
-    ///     The im plot demo class
+    ///     The im gui demo class
     /// </summary>
     /// <seealso cref="IDemo" />
-    public class ImPlotDemo : IDemo
+    public class ImGuiDemo : IDemo
     {
         /// <summary>
         /// Initializes this instance
@@ -57,7 +58,6 @@ namespace Alis.Sample.ImGui.Demos
         public void Run()
         {
             DefaultDemo();
-            SimplePlot();
         }
 
         /// <summary>
@@ -66,28 +66,7 @@ namespace Alis.Sample.ImGui.Demos
         [Conditional("DEBUG")]
         private void DefaultDemo()
         {
-            ImPlot.ShowDemoWindow();
-        }
-
-        /// <summary>
-        ///     Simples the plot
-        /// </summary>
-        [Conditional("DEBUG")]
-        private void SimplePlot()
-        {
-            // Show simple plot of bars plot demo
-            Extension.Graphic.ImGui.Native.ImGui.Begin("Simple plot");
-            Extension.Graphic.ImGui.Native.ImGui.Text("Demonstrating a basic bar plot with horizontal and vertical bars.");
-            float[] data = new float[10] {3, 2, 4, 4, 5, 6, 6, 8, 9, 10};
-            float[] lineData = new float[10] {3, 2, 4, 4, 5, 6, 6, 8, 9, 10};
-            if (ImPlot.BeginPlot("Bar Plot"))
-            {
-                ImPlot.PlotBars("Horizontal", data, 10, 0.7, 1, ImPlotBarsFlags.None);
-                ImPlot.PlotLine("Vertical", lineData, 10, 1, 1, ImPlotLineFlags.None, 0);
-                ImPlot.EndPlot();
-            }
-
-            Extension.Graphic.ImGui.Native.ImGui.End();
+            ImGui.ShowDemoWindow();
         }
     }
 }

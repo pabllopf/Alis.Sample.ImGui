@@ -5,7 +5,7 @@
 //                              ░█─░█ ░█▄▄█ ▄█▄ ░█▄▄▄█
 // 
 //  --------------------------------------------------------------------------
-//  File:FragmentShader.cs
+//  File:Program.cs
 // 
 //  Author:Pablo Perdomo Falcón
 //  Web:https://www.pabllopf.dev/
@@ -27,28 +27,18 @@
 // 
 //  --------------------------------------------------------------------------
 
-namespace Alis.Sample.ImGui.Shaders
+
+namespace Alis.Sample.ImGuiWithSdl2
 {
     /// <summary>
-    ///     The fragment shader
+    ///     The program class
     /// </summary>
-    public readonly struct FragmentShader : IShader
+    internal static class Program
     {
         /// <summary>
-        ///     Gets the value of the shader code
+        ///     Main the args
         /// </summary>
-        public string ShaderCode => @"
-			#version 330
-			
-			precision mediump float;
-			uniform sampler2D Texture;
-			in vec2 Frag_UV;
-			in vec4 Frag_Color;
-			layout (location = 0) out vec4 Out_Color;
-			
-			void main()
-			{
-			    Out_Color = Frag_Color * texture(Texture, Frag_UV.st);
-			}";
+        /// <param name="args">The args</param>
+        public static void Main(string[] args) => new Engine().Start();
     }
 }

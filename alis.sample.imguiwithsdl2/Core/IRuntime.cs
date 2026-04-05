@@ -5,7 +5,7 @@
 //                              ░█─░█ ░█▄▄█ ▄█▄ ░█▄▄▄█
 // 
 //  --------------------------------------------------------------------------
-//  File:VertexShader.cs
+//  File:IRuntime.cs
 // 
 //  Author:Pablo Perdomo Falcón
 //  Web:https://www.pabllopf.dev/
@@ -27,31 +27,24 @@
 // 
 //  --------------------------------------------------------------------------
 
-namespace Alis.Sample.ImGui.Shaders
+namespace Alis.Sample.ImGuiWithSdl2.Core
 {
     /// <summary>
-    ///     The vertex shader
+    /// The runtime interface
     /// </summary>
-    public readonly struct VertexShader : IShader
+    public interface IRuntime
     {
         /// <summary>
-        ///     Gets the value of the shader code
+        /// Initializes this instance
         /// </summary>
-        public string ShaderCode => @"
-			#version 330
-			
-			precision mediump float;
-			layout (location = 0) in vec2 Position;
-			layout (location = 1) in vec2 UV;
-			layout (location = 2) in vec4 Color;
-			uniform mat4 ProjMtx;
-			out vec2 Frag_UV;
-			out vec4 Frag_Color;
-			void main()
-			{
-			    Frag_UV = UV;
-			    Frag_Color = Color;
-			    gl_Position = ProjMtx * vec4(Position.xy, 0, 1);
-			}";
+        public void Initialize();
+        /// <summary>
+        /// Updates this instance
+        /// </summary>
+        public void Update();
+        /// <summary>
+        /// Renders this instance
+        /// </summary>
+        public void Render();
     }
 }

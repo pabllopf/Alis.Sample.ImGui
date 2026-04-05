@@ -5,7 +5,7 @@
 //                              ░█─░█ ░█▄▄█ ▄█▄ ░█▄▄▄█
 // 
 //  --------------------------------------------------------------------------
-//  File:IHasSpaceWork.cs
+//  File:IconDemo.cs
 // 
 //  Author:Pablo Perdomo Falcón
 //  Web:https://www.pabllopf.dev/
@@ -27,16 +27,54 @@
 // 
 //  --------------------------------------------------------------------------
 
-namespace Alis.Sample.ImGui.Core
+using System.Diagnostics;
+using Alis.App.Engine.Fonts;
+using Alis.Extension.Graphic.Ui;
+
+namespace Alis.Sample.ImGuiWithSdl2.Demos
 {
     /// <summary>
-    ///     The has space work interface
+    ///     The icon demo class
     /// </summary>
-    public interface IHasSpaceWork
+    /// <seealso cref="IDemo" />
+    public class IconDemo : IDemo
     {
         /// <summary>
-        ///     Gets the value of the space work
+        /// Starts this instance
         /// </summary>
-        public SpaceWork SpaceWork { get; }
+        public void Start()
+        {
+        }
+
+        /// <summary>
+        ///     Runs this instance
+        /// </summary>
+        public void Run()
+        {
+            SimpleIcons();
+        }
+
+        /// <summary>
+        /// Initializes this instance
+        /// </summary>
+        public void Initialize()
+        {
+        }
+
+        /// <summary>
+        ///     Simples the icons
+        /// </summary>
+        [Conditional("DEBUG")]
+        private void SimpleIcons()
+        {
+            if (ImGui.Begin("Icon Demo"))
+            {
+                ImGui.Separator();
+                ImGui.Text("Font Awesome 5");
+                ImGui.Text($" {FontAwesome5.Bug} {FontAwesome5.Bullhorn} {FontAwesome5.Bullseye} {FontAwesome5.Calendar}");
+            }
+
+            ImGui.End();
+        }
     }
 }

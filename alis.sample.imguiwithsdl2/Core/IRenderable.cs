@@ -5,7 +5,7 @@
 //                              ░█─░█ ░█▄▄█ ▄█▄ ░█▄▄▄█
 // 
 //  --------------------------------------------------------------------------
-//  File:IShader.cs
+//  File:IRenderable.cs
 // 
 //  Author:Pablo Perdomo Falcón
 //  Web:https://www.pabllopf.dev/
@@ -27,16 +27,16 @@
 // 
 //  --------------------------------------------------------------------------
 
-namespace Alis.Sample.ImGui.Shaders
+namespace Alis.Sample.ImGuiWithSdl2.Core
 {
     /// <summary>
-    ///     The shader interface
+    ///     The renderable interface
     /// </summary>
-    public interface IShader
+    public interface IRenderable
     {
         /// <summary>
-        ///     Gets the value of the shader code
+        ///     Renders this instance
         /// </summary>
-        public string ShaderCode { get; }
+        public void Render();
     }
 }

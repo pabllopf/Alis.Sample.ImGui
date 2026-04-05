@@ -5,7 +5,7 @@
 //                              ░█─░█ ░█▄▄█ ▄█▄ ░█▄▄▄█
 // 
 //  --------------------------------------------------------------------------
-//  File:Program.cs
+//  File:IDemo.cs
 // 
 //  Author:Pablo Perdomo Falcón
 //  Web:https://www.pabllopf.dev/
@@ -27,18 +27,26 @@
 // 
 //  --------------------------------------------------------------------------
 
-
-namespace Alis.Sample.ImGui
+namespace Alis.Sample.ImGuiWithSdl2.Demos
 {
     /// <summary>
-    ///     The program class
+    ///     The demo interface
     /// </summary>
-    internal static class Program
+    public interface IDemo
     {
         /// <summary>
-        ///     Main the args
+        /// Initializes this instance
         /// </summary>
-        /// <param name="args">The args</param>
-        public static void Main(string[] args) => new Engine().Start();
+        public void Initialize();
+
+        /// <summary>
+        /// Starts this instance
+        /// </summary>
+        public void Start();
+
+        /// <summary>
+        ///     Runs this instance
+        /// </summary>
+        public void Run();
     }
 }

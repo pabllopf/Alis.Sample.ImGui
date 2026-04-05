@@ -33,10 +33,24 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using Alis.App.Engine.Fonts;
-using Alis.Sample.ImGui.Shaders;
+using Alis.Core.Aspect.Logging;
+using Alis.Core.Aspect.Math.Matrix;
+using Alis.Core.Aspect.Math.Vector;
+using Alis.Core.Graphic.OpenGL;
+using Alis.Core.Graphic.OpenGL.Constructs;
+using Alis.Core.Graphic.OpenGL.Enums;
+using Alis.Extension.Graphic.Sdl2;
+using Alis.Extension.Graphic.Sdl2.Enums;
+using Alis.Extension.Graphic.Sdl2.Mapping;
+using Alis.Extension.Graphic.Sdl2.Structs;
 using Alis.Extension.Graphic.Ui;
+using Alis.Extension.Graphic.Ui.Extras.GuizMo;
+using Alis.Extension.Graphic.Ui.Extras.Node;
+using Alis.Extension.Graphic.Ui.Extras.Plot;
+using Alis.Sample.ImGuiWithSdl2.Shaders;
+using PixelFormat = Alis.Core.Graphic.OpenGL.Enums.PixelFormat;
 
-namespace Alis.Sample.ImGui
+namespace Alis.Sample.ImGuiWithSdl2
 {
     
     /// <summary>
@@ -155,7 +169,6 @@ namespace Alis.Sample.ImGui
             Sdl.SetHint(Hint.HintRenderDriver, "opengl");
 
             // CONFIG THE SDL2 AN OPENGL CONFIGURATION
-            Sdl.SetAttributeByInt(Attr.SdlGlContextFlags, (int) Contexts.SdlGlContextForwardCompatibleFlag);
             Sdl.SetAttributeByProfile(Attr.SdlGlContextProfileMask, Profiles.SdlGlContextProfileCore);
             Sdl.SetAttributeByInt(Attr.SdlGlContextMajorVersion, 4);
             Sdl.SetAttributeByInt(Attr.SdlGlContextMinorVersion, 1);
@@ -187,13 +200,13 @@ namespace Alis.Sample.ImGui
             // compile the shader program
             _shader = new GlShaderProgram(VertexShader.ShaderCode, FragmentShader.ShaderCode);
 
-            spaceWork.ContextGui = Extension.Graphic.ImGui.Native.ImGui.CreateContext();
+            spaceWork.ContextGui =ImGui.CreateContext();
 
-            spaceWork.Io = Extension.Graphic.ImGui.Native.ImGui.GetIo();
+            spaceWork.Io =ImGui.GetIo();
 
             spaceWork.Io.DisplaySize = new Vector2F(800, 600);
 
-            Logger.Info($@"IMGUI VERSION {Extension.Graphic.ImGui.Native.ImGui.GetVersion()}");
+            Logger.Info($@"IMGUI VERSION {ImGui.GetVersion()}");
 
             // active plot renders
             spaceWork.Io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset | ImGuiBackendFlags.PlatformHasViewports | ImGuiBackendFlags.HasGamepad | ImGuiBackendFlags.HasMouseHoveredViewport | ImGuiBackendFlags.HasMouseCursors;
@@ -211,10 +224,10 @@ namespace Alis.Sample.ImGui
             ImNodes.CreateContext();
             ImPlot.CreateContext();
             ImGuizMo.SetImGuiContext(spaceWork.ContextGui);
-            Extension.Graphic.ImGui.Native.ImGui.SetCurrentContext(spaceWork.ContextGui);
+            ImGui.SetCurrentContext(spaceWork.ContextGui);
 
             // REBUILD ATLAS
-            ImFontAtlasPtr fonts = Extension.Graphic.ImGui.Native.ImGui.GetIo().Fonts;
+            ImFontAtlasPtr fonts =ImGui.GetIo().Fonts;
 
             string dirFonts = Environment.CurrentDirectory + "/Assets/Fonts/Jetbrains/";
             string fontToLoad = "JetBrainsMono-Bold.ttf";
@@ -242,7 +255,7 @@ namespace Alis.Sample.ImGui
             ImFontPtr fontLoaded16Solid = fonts.AddFontFromFileTtf(@$"{dirFonts}{fontToLoad}", fontSize);
             try
             {
-                ImFontConfigPtr icons_config = Extension.Graphic.ImGui.Native.ImGui.ImFontConfig();
+                ImFontConfigPtr icons_config =ImGui.ImFontConfig();
                 icons_config.MergeMode = true;
                 icons_config.SnapH = true;
                 icons_config.GlyphMinAdvanceX = 18;
@@ -270,7 +283,7 @@ namespace Alis.Sample.ImGui
             ImFontPtr fontLoaded16Regular = fonts.AddFontFromFileTtf(@$"{dirFonts}{fontToLoad}", fontSize);
             try
             {
-                ImFontConfigPtr icons_config = Extension.Graphic.ImGui.Native.ImGui.ImFontConfig();
+                ImFontConfigPtr icons_config =ImGui.ImFontConfig();
                 icons_config.MergeMode = true;
                 icons_config.SnapH = true;
                 icons_config.GlyphMinAdvanceX = 20;
@@ -298,7 +311,7 @@ namespace Alis.Sample.ImGui
             ImFontPtr fontLoaded16Light = fonts.AddFontFromFileTtf(@$"{dirFonts}{fontToLoad}", fontSize);
             try
             {
-                ImFontConfigPtr icons_config = Extension.Graphic.ImGui.Native.ImGui.ImFontConfig();
+                ImFontConfigPtr icons_config =ImGui.ImFontConfig();
                 icons_config.MergeMode = true;
                 icons_config.SnapH = true;
                 icons_config.GlyphMinAdvanceX = 20;
@@ -329,19 +342,19 @@ namespace Alis.Sample.ImGui
             fonts.ClearTexData();
 
             // CONFIG DOCKSPACE
-            spaceWork.Viewport = Extension.Graphic.ImGui.Native.ImGui.GetMainViewport();
-            Extension.Graphic.ImGui.Native.ImGui.SetNextWindowPos(spaceWork.Viewport.WorkPos);
-            Extension.Graphic.ImGui.Native.ImGui.SetNextWindowSize(spaceWork.Viewport.WorkSize);
-            Extension.Graphic.ImGui.Native.ImGui.SetNextWindowViewport(spaceWork.Viewport.Id);
-            Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
-            Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
+            spaceWork.Viewport =ImGui.GetMainViewport();
+            ImGui.SetNextWindowPos(spaceWork.Viewport.WorkPos);
+            ImGui.SetNextWindowSize(spaceWork.Viewport.WorkSize);
+            ImGui.SetNextWindowViewport(spaceWork.Viewport.Id);
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
             dockspaceflags |= ImGuiWindowFlags.MenuBar;
             dockspaceflags |= ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove;
             dockspaceflags |= ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoNavFocus;
 
             // config spaceWork.Style
-            spaceWork.Style = Extension.Graphic.ImGui.Native.ImGui.GetStyle();
-            Extension.Graphic.ImGui.Native.ImGui.StyleColorsDark();
+            spaceWork.Style =ImGui.GetStyle();
+            ImGui.StyleColorsDark();
             spaceWork.Style.WindowRounding = 0.0f;
             spaceWork.Style.Colors2 = new Vector4F(0.00f, 0.00f, 0.00f, 1.00f);
 
@@ -409,7 +422,7 @@ namespace Alis.Sample.ImGui
                 }
 
                 //Gl.GlClearColor(0.05f, 0.05f, 0.05f, 1.00f);
-                Extension.Graphic.ImGui.Native.ImGui.NewFrame();
+                ImGui.NewFrame();
                 ImGuizMo.BeginFrame();
 
                 // Setup display size (every frame to accommodate for window resizing)
@@ -440,31 +453,31 @@ namespace Alis.Sample.ImGui
                 Vector2F sizeDock = spaceWork.Viewport.Size - new Vector2F(0, sizeMenuDown * 2);
 
 
-                Extension.Graphic.ImGui.Native.ImGui.SetNextWindowPos(spaceWork.Viewport.WorkPos);
-                Extension.Graphic.ImGui.Native.ImGui.SetNextWindowSize(sizeDock);
+                ImGui.SetNextWindowPos(spaceWork.Viewport.WorkPos);
+                ImGui.SetNextWindowSize(sizeDock);
                 //ImGui.SetNextWindowViewport(spaceWork.Viewport .ID);
-                Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
-                Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
-                Extension.Graphic.ImGui.Native.ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2F(0.0f, 0.0f));
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2F(0.0f, 0.0f));
 
 
-                Extension.Graphic.ImGui.Native.ImGui.Begin("DockSpace Demo", dockspaceflags);
+                ImGui.Begin("DockSpace Demo", dockspaceflags);
                 // Submit the DockSpace
 
-                Extension.Graphic.ImGui.Native.ImGui.PopStyleVar(3);
+                ImGui.PopStyleVar(3);
 
-                uint dockSpaceId = Extension.Graphic.ImGui.Native.ImGui.GetId("MyDockSpace");
-                Extension.Graphic.ImGui.Native.ImGui.DockSpace(dockSpaceId, sizeDock);
+                uint dockSpaceId =ImGui.GetId("MyDockSpace");
+                ImGui.DockSpace(dockSpaceId, sizeDock);
 
 
                 // RENDER SAMPLES AND CODE
                 spaceWork.Update();
 
-                Extension.Graphic.ImGui.Native.ImGui.End();
+                ImGui.End();
                 //ImGui.PopFont();
 
                 Sdl.MakeCurrent(spaceWork.Window, _glContext);
-                Extension.Graphic.ImGui.Native.ImGui.Render();
+                ImGui.Render();
 
                 Gl.GlViewport(0, 0, (int) spaceWork.Io.DisplaySize.X, (int) spaceWork.Io.DisplaySize.Y);
                 Gl.GlClear(ClearBufferMask.ColorBufferBit);
@@ -473,8 +486,8 @@ namespace Alis.Sample.ImGui
 
                 IntPtr backupCurrentWindow = Sdl.GetCurrentWindow();
                 IntPtr backupCurrentContext = Sdl.GetCurrentContext();
-                Extension.Graphic.ImGui.Native.ImGui.UpdatePlatformWindows();
-                Extension.Graphic.ImGui.Native.ImGui.RenderPlatformWindowsDefault();
+                ImGui.UpdatePlatformWindows();
+                ImGui.RenderPlatformWindowsDefault();
                 Sdl.MakeCurrent(backupCurrentWindow, backupCurrentContext);
 
 
@@ -504,7 +517,7 @@ namespace Alis.Sample.ImGui
         /// <param name="evt">The evt</param>
         private void ProcessEvent(Event evt)
         {
-            ImGuiIoPtr imGuiIoPtr = Extension.Graphic.ImGui.Native.ImGui.GetIo();
+            ImGuiIoPtr imGuiIoPtr =ImGui.GetIo();
             switch (evt.type)
             {
                 case EventType.Mousewheel:
@@ -576,7 +589,7 @@ namespace Alis.Sample.ImGui
         /// </summary>
         private void UpdateMousePosAndButtons()
         {
-            ImGuiIoPtr imGuiIoPtr = Extension.Graphic.ImGui.Native.ImGui.GetIo();
+            ImGuiIoPtr imGuiIoPtr =ImGui.GetIo();
 
             // Set OS mouse position if requested (rarely used, only when ImGuiConfigFlags_NavEnableSetMousePos is enabled by user)
             if (imGuiIoPtr.WantSetMousePos)
@@ -613,7 +626,7 @@ namespace Alis.Sample.ImGui
             }
 
             // SDL_CaptureMouse() let the OS know e.g. that our imgui drag outside the SDL window boundaries shouldn't e.g. trigger the OS window resize cursor.
-            bool anyMouseButtonDown = Extension.Graphic.ImGui.Native.ImGui.IsAnyMouseDown();
+            bool anyMouseButtonDown =ImGui.IsAnyMouseDown();
             Sdl.CaptureMouse(anyMouseButtonDown);
         }
 
@@ -716,7 +729,7 @@ namespace Alis.Sample.ImGui
         /// </summary>
         private void RenderDrawData()
         {
-            ImDrawData drawData = Extension.Graphic.ImGui.Native.ImGui.GetDrawData();
+            ImDrawData drawData = ImGui.GetDrawData();
 
             // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
             int fbWidth = (int) (drawData.DisplaySize.X * drawData.FramebufferScale.X);
@@ -733,7 +746,7 @@ namespace Alis.Sample.ImGui
 
             drawData.ScaleClipRects(clipScale);
 
-            IntPtr lastTexId = Extension.Graphic.ImGui.Native.ImGui.GetIo().Fonts.TexId;
+            IntPtr lastTexId =ImGui.GetIo().Fonts.TexId;
             Gl.GlBindTexture(TextureTarget.Texture2D, (uint) lastTexId);
 
             int drawVertSize = Marshal.SizeOf<ImDrawVert>();

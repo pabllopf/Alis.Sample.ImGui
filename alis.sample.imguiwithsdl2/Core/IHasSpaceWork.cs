@@ -5,7 +5,7 @@
 //                              ░█─░█ ░█▄▄█ ▄█▄ ░█▄▄▄█
 // 
 //  --------------------------------------------------------------------------
-//  File:IRenderable.cs
+//  File:IHasSpaceWork.cs
 // 
 //  Author:Pablo Perdomo Falcón
 //  Web:https://www.pabllopf.dev/
@@ -27,16 +27,16 @@
 // 
 //  --------------------------------------------------------------------------
 
-namespace Alis.Sample.ImGui.Core
+namespace Alis.Sample.ImGuiWithSdl2.Core
 {
     /// <summary>
-    ///     The renderable interface
+    ///     The has space work interface
     /// </summary>
-    public interface IRenderable
+    public interface IHasSpaceWork
     {
         /// <summary>
-        ///     Renders this instance
+        ///     Gets the value of the space work
         /// </summary>
-        public void Render();
+        public SpaceWork SpaceWork { get; }
     }
 }

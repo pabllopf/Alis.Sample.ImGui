@@ -28,9 +28,10 @@
 //  --------------------------------------------------------------------------
 
 using System;
-using Alis.Sample.ImGui.Demos;
+using Alis.Extension.Graphic.Ui;
+using Alis.Sample.ImGuiWithSdl2.Demos;
 
-namespace Alis.Sample.ImGui
+namespace Alis.Sample.ImGuiWithSdl2
 {
     /// <summary>
     /// The space work class

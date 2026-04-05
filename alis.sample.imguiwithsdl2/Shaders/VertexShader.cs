@@ -5,7 +5,7 @@
 //                              ░█─░█ ░█▄▄█ ▄█▄ ░█▄▄▄█
 // 
 //  --------------------------------------------------------------------------
-//  File:IconDemo.cs
+//  File:VertexShader.cs
 // 
 //  Author:Pablo Perdomo Falcón
 //  Web:https://www.pabllopf.dev/
@@ -27,53 +27,31 @@
 // 
 //  --------------------------------------------------------------------------
 
-using System.Diagnostics;
-using Alis.App.Engine.Fonts;
-
-namespace Alis.Sample.ImGui.Demos
+namespace Alis.Sample.ImGuiWithSdl2.Shaders
 {
     /// <summary>
-    ///     The icon demo class
+    ///     The vertex shader
     /// </summary>
-    /// <seealso cref="IDemo" />
-    public class IconDemo : IDemo
+    public readonly struct VertexShader : IShader
     {
         /// <summary>
-        /// Starts this instance
+        ///     Gets the value of the shader code
         /// </summary>
-        public void Start()
-        {
-        }
-
-        /// <summary>
-        ///     Runs this instance
-        /// </summary>
-        public void Run()
-        {
-            SimpleIcons();
-        }
-
-        /// <summary>
-        /// Initializes this instance
-        /// </summary>
-        public void Initialize()
-        {
-        }
-
-        /// <summary>
-        ///     Simples the icons
-        /// </summary>
-        [Conditional("DEBUG")]
-        private void SimpleIcons()
-        {
-            if (Extension.Graphic.ImGui.Native.ImGui.Begin("Icon Demo"))
-            {
-                Extension.Graphic.ImGui.Native.ImGui.Separator();
-                Extension.Graphic.ImGui.Native.ImGui.Text("Font Awesome 5");
-                Extension.Graphic.ImGui.Native.ImGui.Text($" {FontAwesome5.Bug} {FontAwesome5.Bullhorn} {FontAwesome5.Bullseye} {FontAwesome5.Calendar}");
-            }
-
-            Extension.Graphic.ImGui.Native.ImGui.End();
-        }
+        public string ShaderCode => @"
+			#version 330
+			
+			precision mediump float;
+			layout (location = 0) in vec2 Position;
+			layout (location = 1) in vec2 UV;
+			layout (location = 2) in vec4 Color;
+			uniform mat4 ProjMtx;
+			out vec2 Frag_UV;
+			out vec4 Frag_Color;
+			void main()
+			{
+			    Frag_UV = UV;
+			    Frag_Color = Color;
+			    gl_Position = ProjMtx * vec4(Position.xy, 0, 1);
+			}";
     }
 }

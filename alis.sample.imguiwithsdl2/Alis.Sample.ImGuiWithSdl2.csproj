@@ -6,6 +6,7 @@
 
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU;x64;arm64;x86;WebAssembly</Platforms>
+        <NoAutoGenerateFiles>true</NoAutoGenerateFiles>
     </PropertyGroup>
 
     <!-- Configuración Debug -->
@@ -39,6 +40,7 @@
     <ItemGroup>
         <PackageReference Include="Alis" Version="*" />
         <PackageReference Include="Alis.Extension.Graphic.Sdl2" Version="*" />
+        <PackageReference Include="Alis.Extension.Graphic.Ui" Version="*" />
     </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@
 //                              ░█─░█ ░█▄▄█ ▄█▄ ░█▄▄▄█
 // 
 //  --------------------------------------------------------------------------
-//  File:IRuntime.cs
+//  File:IFont.cs
 // 
 //  Author:Pablo Perdomo Falcón
 //  Web:https://www.pabllopf.dev/
@@ -27,24 +27,12 @@
 // 
 //  --------------------------------------------------------------------------
 
-namespace Alis.Sample.ImGui.Core
+namespace Alis.Sample.ImGuiWithSdl2.Fonts
 {
     /// <summary>
-    /// The runtime interface
+    ///     The font interface
     /// </summary>
-    public interface IRuntime
+    public interface IFont
     {
-        /// <summary>
-        /// Initializes this instance
-        /// </summary>
-        public void Initialize();
-        /// <summary>
-        /// Updates this instance
-        /// </summary>
-        public void Update();
-        /// <summary>
-        /// Renders this instance
-        /// </summary>
-        public void Render();
     }
 }

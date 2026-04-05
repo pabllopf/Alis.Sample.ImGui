@@ -28,9 +28,10 @@
 //  --------------------------------------------------------------------------
 
 using System.Diagnostics;
-using Alis.Extension.Graphic.ImGui.Extras.Node;
+using Alis.Extension.Graphic.Ui;
+using Alis.Extension.Graphic.Ui.Extras.Node;
 
-namespace Alis.Sample.ImGui.Demos
+namespace Alis.Sample.ImGuiWithSdl2.Demos
 {
     /// <summary>
     ///     The im node demo class
@@ -66,28 +67,28 @@ namespace Alis.Sample.ImGui.Demos
         [Conditional("DEBUG")]
         private void DefaultDemo()
         {
-            Extension.Graphic.ImGui.Native.ImGui.Begin("simple node editor");
+            ImGui.Begin("simple node editor");
 
             ImNodes.BeginNodeEditor();
             ImNodes.BeginNode(1);
 
             ImNodes.BeginNodeTitleBar();
-            Extension.Graphic.ImGui.Native.ImGui.TextUnformatted("simple node :)");
+            ImGui.TextUnformatted("simple node :)");
             ImNodes.EndNodeTitleBar();
 
             ImNodes.BeginInputAttribute(2);
-            Extension.Graphic.ImGui.Native.ImGui.Text("input");
+            ImGui.Text("input");
             ImNodes.EndInputAttribute();
 
             ImNodes.BeginOutputAttribute(3);
-            Extension.Graphic.ImGui.Native.ImGui.Indent(40);
-            Extension.Graphic.ImGui.Native.ImGui.Text("output");
+            ImGui.Indent(40);
+            ImGui.Text("output");
             ImNodes.EndOutputAttribute();
 
             ImNodes.EndNode();
             ImNodes.EndNodeEditor();
 
-            Extension.Graphic.ImGui.Native.ImGui.End();
+            ImGui.End();
         }
     }
 }

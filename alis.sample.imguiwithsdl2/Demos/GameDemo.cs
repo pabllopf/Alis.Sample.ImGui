@@ -30,9 +30,14 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Alis.Core.Aspect.Math.Shapes.Rectangle;
+using Alis.Core.Aspect.Math.Vector;
+using Alis.Core.Graphic.OpenGL;
+using Alis.Core.Graphic.OpenGL.Enums;
+using Alis.Extension.Graphic.Sdl2;
+using Alis.Extension.Graphic.Ui;
 
-
-namespace Alis.Sample.ImGui.Demos
+namespace Alis.Sample.ImGuiWithSdl2.Demos
 {
     /// <summary>
     ///     The game demo class
@@ -171,10 +176,10 @@ namespace Alis.Sample.ImGui.Demos
             Gl.GlTexParameteri(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, TextureParameter.Linear);
             Gl.GlBindTexture(TextureTarget.Texture2D, 0);
 
-            if (Extension.Graphic.ImGui.Native.ImGui.Begin(NameWindow, ref closeRender, ImGuiWindowFlags.NoCollapse))
+            if (ImGui.Begin(NameWindow, ref closeRender, ImGuiWindowFlags.NoCollapse))
             {
-                Extension.Graphic.ImGui.Native.ImGui.Text("This is some useful text.");
-                Extension.Graphic.ImGui.Native.ImGui.Image(
+                ImGui.Text("This is some useful text.");
+                ImGui.Image(
                     texture,
                     new Vector2F(100, 100),
                     new Vector2F(1, 1),
@@ -183,7 +188,7 @@ namespace Alis.Sample.ImGui.Demos
                     new Vector4F(255, 0, 0, 255));
             }
 
-            Extension.Graphic.ImGui.Native.ImGui.End();
+            ImGui.End();
         }
 
         /// <summary>

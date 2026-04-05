@@ -5,7 +5,7 @@
 //                              ░█─░█ ░█▄▄█ ▄█▄ ░█▄▄▄█
 // 
 //  --------------------------------------------------------------------------
-//  File:IDemo.cs
+//  File:FragmentShader.cs
 // 
 //  Author:Pablo Perdomo Falcón
 //  Web:https://www.pabllopf.dev/
@@ -27,26 +27,28 @@
 // 
 //  --------------------------------------------------------------------------
 
-namespace Alis.Sample.ImGui.Demos
+namespace Alis.Sample.ImGuiWithSdl2.Shaders
 {
     /// <summary>
-    ///     The demo interface
+    ///     The fragment shader
     /// </summary>
-    public interface IDemo
+    public readonly struct FragmentShader : IShader
     {
         /// <summary>
-        /// Initializes this instance
+        ///     Gets the value of the shader code
         /// </summary>
-        public void Initialize();
-
-        /// <summary>
-        /// Starts this instance
-        /// </summary>
-        public void Start();
-
-        /// <summary>
-        ///     Runs this instance
-        /// </summary>
-        public void Run();
+        public string ShaderCode => @"
+			#version 330
+			
+			precision mediump float;
+			uniform sampler2D Texture;
+			in vec2 Frag_UV;
+			in vec4 Frag_Color;
+			layout (location = 0) out vec4 Out_Color;
+			
+			void main()
+			{
+			    Out_Color = Frag_Color * texture(Texture, Frag_UV.st);
+			}";
     }
 }
