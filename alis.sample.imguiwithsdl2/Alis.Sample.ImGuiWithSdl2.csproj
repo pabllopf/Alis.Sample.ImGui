@@ -10,23 +10,6 @@
     </PropertyGroup>
 
     <!-- Configuración Debug -->
-    <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-        <DebugType>full</DebugType>
-        <DebugSymbols>true</DebugSymbols>
-        <Optimize>false</Optimize>
-        <NoAutoGenerateFiles>true</NoAutoGenerateFiles>
-    </PropertyGroup>
-
-    <!-- Configuración Release -->
-    <PropertyGroup Condition="'$(Configuration)'=='Release'">
-        <DefineConstants>RELEASE;TRACE</DefineConstants>
-        <DebugType>pdbonly</DebugType>
-        <DebugSymbols>false</DebugSymbols>
-        <Optimize>true</Optimize>
-    </PropertyGroup>
-
-    <!-- Configuración Debug -->
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|WebAssembly'">
         <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
     </PropertyGroup>
@@ -35,8 +18,7 @@
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|WebAssembly'">
         <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
     </PropertyGroup>
-
-
+    
     <ItemGroup>
         <PackageReference Include="Alis" Version="*" />
         <PackageReference Include="Alis.Extension.Graphic.Sdl2" Version="*" />
